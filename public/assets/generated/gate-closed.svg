@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" role="img" aria-label="Closed blue white fantasy gate">
+  <defs>
+    <radialGradient id="sky" cx="50%" cy="45%" r="70%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="44%" stop-color="#dff2ff"/>
+      <stop offset="100%" stop-color="#b9d8ff"/>
+    </radialGradient>
+    <linearGradient id="marble" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="42%" stop-color="#dceeff"/>
+      <stop offset="100%" stop-color="#9fc8ff"/>
+    </linearGradient>
+    <linearGradient id="door" x1="0" x2="1">
+      <stop offset="0%" stop-color="#f8fdff" stop-opacity=".94"/>
+      <stop offset="48%" stop-color="#b8ddff" stop-opacity=".54"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity=".88"/>
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="22" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <pattern id="stars" width="92" height="92" patternUnits="userSpaceOnUse">
+      <circle cx="12" cy="19" r="1.8" fill="#3b82f6" opacity=".35"/>
+      <circle cx="72" cy="36" r="1.2" fill="#ffffff" opacity=".8"/>
+      <circle cx="42" cy="75" r="1.5" fill="#60a5fa" opacity=".25"/>
+    </pattern>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#sky)"/>
+  <rect width="1920" height="1080" fill="url(#stars)" opacity=".8"/>
+  <ellipse cx="960" cy="1010" rx="620" ry="130" fill="#0071e3" opacity=".14" filter="url(#glow)"/>
+  <path d="M550 910V460c0-234 176-368 410-368s410 134 410 368v450Z" fill="url(#marble)" opacity=".9" filter="url(#glow)"/>
+  <path d="M610 892V462c0-198 152-310 350-310s350 112 350 310v430Z" fill="#f7fcff" opacity=".48" stroke="#ffffff" stroke-width="7"/>
+  <path d="M642 875V480c0-174 138-282 318-282v677Z" fill="url(#door)" stroke="#dff2ff" stroke-width="4"/>
+  <path d="M960 198c180 0 318 108 318 282v395H960Z" fill="url(#door)" stroke="#dff2ff" stroke-width="4"/>
+  <path d="M960 208v665" stroke="#66b7ff" stroke-width="4" opacity=".52"/>
+  <g stroke="#5aa7f8" stroke-width="2" opacity=".32">
+    <path d="M704 360h512M670 468h580M662 590h596M662 718h596"/>
+    <path d="M760 252v604M856 214v650M1064 214v650M1160 252v604"/>
+  </g>
+  <g fill="none" stroke="#ffffff" stroke-width="3" opacity=".65">
+    <path d="M578 900V462c0-220 164-340 382-340s382 120 382 340v438"/>
+    <path d="M640 880V480c0-176 142-292 320-292s320 116 320 292v400"/>
+  </g>
+  <circle cx="960" cy="540" r="116" fill="#88d5ff" opacity=".16" filter="url(#glow)"/>
+</svg>
