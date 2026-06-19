@@ -321,7 +321,7 @@ button {
 .real-door {
   position: absolute;
   inset: 0;
-  background-image: url("/assets/generated/celestial-gate.png");
+  background-image: url("/assets/generated/celestial-gate-warm.png");
   background-size: cover;
   background-position: center center;
   filter: drop-shadow(0 0 18px oklch(0.68 0.17 230 / 0.5)) saturate(1.08);

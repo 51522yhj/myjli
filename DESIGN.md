@@ -20,7 +20,7 @@
 ## Layout
 
 - 背景视频为全站通用固定层，首页清晰展示，后续内容通过浅色朦胧玻璃让视频继续透出。
-- 入口保留开门体验，主视觉直接使用 `public/assets/generated/celestial-gate.png`，不再用纯 CSS 拼门。
+- 入口保留开门体验，主视觉直接使用 `public/assets/generated/celestial-gate-warm.png`，不再用纯 CSS 拼门。
 - 首页 Hero 使用全屏远程视频背景和中下方电影海报式拼音姓名，不展示头像，不展示“Java 后端开发工程师”。
 - 工作经历用纵向轨道，企业项目用宽幅系统面板，个人项目用流程线和时序图。
 - VibeCoding 采用上文案、下图片舞台结构，由用户手动切换项目和图片，展示真实 README 截图与仓库链接。
@@ -35,7 +35,7 @@
 
 ## Assets
 
-- `public/assets/generated/celestial-gate.png`
+- `public/assets/generated/celestial-gate-warm.png`
 - `public/assets/generated/detail-texture.svg`
 - 远程全站背景视频：`https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_171521_25968ba2-b594-4b32-aab7-f6b69398a6fa.mp4`
 - `public/assets/showcase/*`
