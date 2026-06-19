@@ -759,9 +759,7 @@ function ParticleField() {
 
 function GateIntro({ entered, onEnter }) {
   const [opening, setOpening] = useState(false);
-  const gateVideoRef = useRef(null);
   const reduced = useReducedMotion();
-  useVideoLoopFade(gateVideoRef);
 
   const start = () => {
     if (opening) return;
@@ -773,14 +771,9 @@ function GateIntro({ entered, onEnter }) {
     <AnimatePresence>
       {!entered && (
         <motion.section className={`gate-intro ${opening ? "opening" : ""}`} exit={{ opacity: 0 }} transition={{ duration: 0.42 }}>
-          <video className="gate-video-bg" ref={gateVideoRef} src={cinematicVideoUrl} autoPlay muted playsInline preload="metadata" aria-hidden="true" />
+          <img className="gate-world-image" src="/assets/generated/celestial-gate.png" alt="" aria-hidden="true" />
           <div className="gate-cinematic-shade" aria-hidden="true" />
           <div className="real-gate-stage" aria-hidden="true">
-            <div className="cosmic-gate-frame">
-              <span />
-              <span />
-              <span />
-            </div>
             <div className="real-door real-door-left" />
             <div className="real-door real-door-right" />
             <div className="gate-rift" />
