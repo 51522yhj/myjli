@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import {
   ArrowRight,
@@ -1139,15 +1139,6 @@ function ImageCarousel({ project }) {
 }
 
 function Skills() {
-  const arranged = useMemo(
-    () =>
-      skills.map((skill, index) => ({
-        skill,
-        angle: (index / skills.length) * 360,
-      })),
-    []
-  );
-
   return (
     <section id="skills" className="content-section skills-section">
       <SectionTitle label="Skill Constellation" title="专业技能" />
@@ -1157,11 +1148,13 @@ function Skills() {
           <strong>Java Backend</strong>
           <span>AI Engineering</span>
         </div>
-        {arranged.map(({ skill, angle }) => (
-          <span className="skill-chip" key={skill} style={{ "--angle": `${angle}deg` }}>
-            {skill}
-          </span>
-        ))}
+        <div className="skill-grid">
+          {skills.map((skill) => (
+            <span className="skill-chip" key={skill}>
+              {skill}
+            </span>
+          ))}
+        </div>
       </Reveal>
       <Reveal className="skill-proof">
         <p>熟练使用 Vibe Coding，有实际线上网站、小程序上线经验，并掌握 Zookeeper、RabbitMQ 等中间件。</p>
