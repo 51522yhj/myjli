@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import {
   ArrowRight,
@@ -1139,6 +1139,15 @@ function ImageCarousel({ project }) {
 }
 
 function Skills() {
+  const arranged = useMemo(
+    () =>
+      skills.map((skill, index) => ({
+        skill,
+        angle: (index / skills.length) * 360 - 90,
+      })),
+    []
+  );
+
   return (
     <section id="skills" className="content-section skills-section">
       <SectionTitle label="Skill Constellation" title="专业技能" />
@@ -1148,9 +1157,9 @@ function Skills() {
           <strong>Java Backend</strong>
           <span>AI Engineering</span>
         </div>
-        <div className="skill-grid">
-          {skills.map((skill) => (
-            <span className="skill-chip" key={skill}>
+        <div className="skill-orbit" aria-label="技能星座">
+          {arranged.map(({ skill, angle }) => (
+            <span className="skill-chip" key={skill} style={{ "--angle": `${angle}deg` }}>
               {skill}
             </span>
           ))}

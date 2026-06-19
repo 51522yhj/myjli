@@ -1180,24 +1180,23 @@ button {
 .skill-stage {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(180px, 0.34fr) minmax(0, 1fr);
-  min-height: auto;
-  align-items: center;
-  gap: clamp(1.2rem, 3vw, 2.4rem);
+  min-height: clamp(430px, 46vw, 540px);
+  place-items: center;
   overflow: hidden;
-  padding: clamp(1.2rem, 3vw, 2rem);
+  padding: clamp(1.4rem, 3vw, 2.2rem);
   background:
-    radial-gradient(circle at 23% 50%, oklch(1 0 0 / 0.88) 0 9%, oklch(0.8 0.13 228 / 0.24) 24%, transparent 45%),
-    conic-gradient(from 18deg at 24% 50%, transparent, oklch(0.7 0.18 236 / 0.12), transparent, oklch(0.9 0.09 92 / 0.12), transparent),
+    radial-gradient(circle at 50% 50%, oklch(1 0 0 / 0.88) 0 9%, oklch(0.8 0.13 228 / 0.26) 24%, transparent 45%),
+    conic-gradient(from 18deg at 50% 50%, transparent, oklch(0.7 0.18 236 / 0.13), transparent, oklch(0.9 0.09 92 / 0.13), transparent),
     linear-gradient(135deg, oklch(1 0 0 / 0.74), oklch(0.91 0.043 238 / 0.66));
 }
 
 .skill-core {
+  position: relative;
+  z-index: 2;
   display: grid;
-  width: clamp(150px, 14vw, 190px);
-  height: clamp(150px, 14vw, 190px);
+  width: clamp(150px, 15vw, 190px);
+  height: clamp(150px, 15vw, 190px);
   place-items: center;
-  justify-self: center;
   border-radius: 50%;
   background: var(--primary);
   color: white;
@@ -1215,24 +1214,49 @@ button {
   display: block;
 }
 
-.skill-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(142px, 1fr));
-  gap: 0.65rem;
-  width: 100%;
+.skill-orbit {
+  position: absolute;
+  inset: clamp(1.25rem, 3vw, 2rem);
+  z-index: 3;
+  pointer-events: none;
+}
+
+.skill-orbit::before,
+.skill-orbit::after {
+  position: absolute;
+  inset: 50%;
+  width: min(58vw, 500px);
+  height: min(58vw, 500px);
+  border: 1px solid oklch(0.68 0.15 238 / 0.22);
+  border-radius: 50%;
+  content: "";
+  transform: translate(-50%, -50%) rotateX(64deg);
+}
+
+.skill-orbit::after {
+  width: min(48vw, 410px);
+  height: min(48vw, 410px);
+  border-color: oklch(0.83 0.12 92 / 0.28);
+  transform: translate(-50%, -50%) rotateX(64deg) rotateZ(42deg);
 }
 
 .skill-chip {
+  position: absolute;
+  left: 50%;
+  top: 50%;
   display: inline-flex;
-  min-height: 44px;
+  min-height: 42px;
   align-items: center;
   justify-content: center;
+  transform: rotate(var(--angle)) translateX(min(22vw, 220px)) rotate(calc(-1 * var(--angle))) translate(-50%, -50%);
   border-radius: 999px;
   background: oklch(1 0 0 / 0.78);
-  padding: 0.55rem 0.9rem;
+  padding: 0.5rem 0.85rem;
   color: var(--primary-deep);
+  font-size: clamp(0.86rem, 1.1vw, 1rem);
   font-weight: 900;
   white-space: nowrap;
+  pointer-events: auto;
   box-shadow: 0 12px 28px oklch(0.34 0.15 252 / 0.1);
 }
 
@@ -1502,17 +1526,24 @@ button {
   }
 
   .skill-stage {
-    grid-template-columns: 1fr;
+    min-height: 450px;
     padding: 1.2rem;
   }
 
   .skill-core {
-    width: 170px;
-    height: 170px;
+    width: 160px;
+    height: 160px;
   }
 
-  .skill-grid {
-    grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+  .skill-orbit {
+    inset: 1rem;
+  }
+
+  .skill-chip {
+    min-height: 38px;
+    padding: 0.44rem 0.72rem;
+    font-size: 0.86rem;
+    transform: rotate(var(--angle)) translateX(min(25vw, 188px)) rotate(calc(-1 * var(--angle))) translate(-50%, -50%);
   }
 }
 
@@ -1561,6 +1592,33 @@ button {
   .vibe-section,
   .skills-section {
     padding: 2rem 0;
+  }
+
+  .skill-stage {
+    min-height: 410px;
+    padding: 0.85rem;
+  }
+
+  .skill-core {
+    width: 132px;
+    height: 132px;
+  }
+
+  .skill-chip {
+    min-height: 34px;
+    padding: 0.38rem 0.62rem;
+    font-size: 0.76rem;
+    transform: rotate(var(--angle)) translateX(min(27vw, 158px)) rotate(calc(-1 * var(--angle))) translate(-50%, -50%);
+  }
+
+  .skill-orbit::before {
+    width: min(76vw, 330px);
+    height: min(76vw, 330px);
+  }
+
+  .skill-orbit::after {
+    width: min(64vw, 280px);
+    height: min(64vw, 280px);
   }
 
   .vibe-section .section-title,
