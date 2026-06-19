@@ -1042,7 +1042,7 @@ function VibeCodingWorks({ onDetail }) {
 
   return (
     <section id="vibecoding" className="content-section vibe-section">
-      <SectionTitle label="VibeCoding Works" title="VibeCoding 作品" text="每个作品单独导航，用户手动切换项目和图片，展示真实 README 截图与仓库链接。" />
+      <SectionTitle label="VibeCoding Works" title="VibeCoding 作品" />
       <Reveal className="vibe-shell">
         <div className="vibe-nav" role="tablist" aria-label="VibeCoding 项目">
           {vibeProjects.map((item, index) => (
@@ -1150,7 +1150,7 @@ function Skills() {
 
   return (
     <section id="skills" className="content-section skills-section">
-      <SectionTitle label="Skill Constellation" title="专业技能" text="后端主栈、工程化工具和 Vibe Coding 经验共同构成当前能力重心。" />
+      <SectionTitle label="Skill Constellation" title="专业技能" />
       <Reveal className="skill-stage">
         <div className="skill-core">
           <Sparkle weight="fill" />
