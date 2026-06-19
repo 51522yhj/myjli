@@ -559,11 +559,14 @@ button {
 
 .gate-copy h1 {
   margin-top: 0.65rem;
-  color: var(--ink);
+  color: oklch(1 0 0 / 0.96);
   font-size: clamp(2.25rem, 5.2vw, 4.75rem);
   line-height: 0.92;
   letter-spacing: 0.09em;
-  text-shadow: 0 0 26px oklch(1 0 0 / 0.7), 0 24px 60px oklch(0.34 0.15 252 / 0.22);
+  text-shadow:
+    0 0 26px oklch(1 0 0 / 0.72),
+    0 8px 28px oklch(0.15 0.08 252 / 0.46),
+    0 24px 70px oklch(0.34 0.15 252 / 0.32);
   white-space: nowrap;
 }
 
@@ -969,11 +972,13 @@ button {
 
 .section-title h2 {
   margin-top: 0.55rem;
-  color: var(--ink);
+  color: oklch(1 0 0 / 0.94);
   font-size: clamp(2.6rem, 8vw, 6.3rem);
   line-height: 0.95;
   text-transform: uppercase;
-  text-shadow: 0 18px 70px oklch(0.76 0.12 78 / 0.18);
+  text-shadow:
+    0 3px 18px oklch(0.13 0.07 252 / 0.46),
+    0 18px 70px oklch(0.76 0.12 78 / 0.24);
 }
 
 .vibe-section .section-title,
@@ -989,9 +994,10 @@ button {
 .section-title p {
   max-width: 62ch;
   margin: 1rem 0 0;
-  color: var(--muted);
+  color: oklch(1 0 0 / 0.82);
   font-size: 1.08rem;
   line-height: 1.8;
+  text-shadow: 0 2px 18px oklch(0.13 0.07 252 / 0.38);
 }
 
 .work-orbit {
