@@ -501,7 +501,14 @@ function GateIntro({ entered, onEnter }) {
     <AnimatePresence>
       {!entered && (
         <motion.section className={`gate-intro ${opening ? "opening" : ""}`} exit={{ opacity: 0 }} transition={{ duration: 0.7 }}>
-          <img className="gate-world-image" src="/assets/generated/fantasy-entry.svg" alt="" aria-hidden="true" />
+          <img className="gate-world-image" src="/assets/generated/celestial-gate.png" alt="" aria-hidden="true" />
+          <div className="gate-cinematic-shade" aria-hidden="true" />
+          <div className="real-gate-stage" aria-hidden="true">
+            <div className="real-door real-door-left" />
+            <div className="real-door real-door-right" />
+            <div className="gate-rift" />
+            <div className="gate-crystal-flare" />
+          </div>
           <div className="entry-mist entry-mist-one" aria-hidden="true" />
           <div className="entry-mist entry-mist-two" aria-hidden="true" />
           <div className="entry-stars" aria-hidden="true" />

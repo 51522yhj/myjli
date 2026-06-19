@@ -2,7 +2,7 @@
 
 ## Visual Thesis
 
-清晨冰蓝色的幻想科技入口：全画布图像承载“进入简历世界”的第一记忆点，蓝白光门表达 AI 与工程化，真实项目截图和分组详情承担证据感。
+冰蓝色水晶圣殿入口：真实 3D 大门图像承载“进入简历世界”的第一记忆点，蓝白光门和开门动效表达 AI 与工程化，真实项目截图和分组详情承担证据感。
 
 ## Palette
 
@@ -26,7 +26,7 @@
 
 ## Motion
 
-- 门入口：图像资产驱动的幻想登录页，点击后通过光门扩散、镜头推进和粒子渐隐进入内容。
+- 门入口：图 2 风格的 3D 水晶圣殿大门，点击后门缝发光、左右门扇翻开、雾气与粒子扩散，再通过光门进入内容。
 - 内容探索：章节进入时轻微上移、透明度和模糊过渡。
 - VibeCoding：项目级切换和图片级自动播放。
 - 所有动效在 `prefers-reduced-motion` 下快速降级。
@@ -36,6 +36,7 @@
 - `public/assets/generated/gate-closed.svg`
 - `public/assets/generated/gate-open.svg`
 - `public/assets/generated/fantasy-entry.svg`
+- `public/assets/generated/celestial-gate.png`
 - `public/assets/generated/detail-texture.svg`
 - `public/assets/showcase/*`
 - `public/assets/resume/avatar.jpg`
