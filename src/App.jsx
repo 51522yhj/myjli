@@ -586,13 +586,9 @@ const skills = [
 const allDetails = [...enterpriseProjects, ...personalProjects, ...vibeProjects];
 
 function useGateEntered() {
-  const [entered, setEntered] = useState(() => {
-    const forceIntro = new URLSearchParams(window.location.search).has("intro");
-    return !forceIntro && window.sessionStorage.getItem("myjli-entered") === "true";
-  });
+  const [entered, setEntered] = useState(false);
 
   const enter = () => {
-    window.sessionStorage.setItem("myjli-entered", "true");
     setEntered(true);
   };
 
