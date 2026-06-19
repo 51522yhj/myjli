@@ -56,7 +56,7 @@ const workExperience = [
     tags: ["RabbitMQ", "Redis", "XXL-JOB", "gRPC", "股票软件"],
   },
   {
-    time: "2024.07 - 2024.09",
+    time: "2025.03 - 2025.08",
     company: "武汉杰思敏科技有限公司",
     role: "后端开发实习生",
     text: "参与对接国企的项目开发，主要负责接口开发、数据处理、业务联调与交付配合。",
@@ -86,6 +86,19 @@ const enterpriseProjects = [
       "通过任务表、规则结果表、应用数据快照表定位数据来源与 AI 判断依据。",
     ],
     flow: ["创建审核任务", "匹配场景规则", "采集外部数据", "Handler 编排", "组装 AI/DS 请求", "规则结果落库", "人工复核/重跑/回调"],
+    sequence: {
+      lanes: ["业务系统/前端", "任务服务", "AimodContext", "外部系统", "OCR/AI-DS", "结果库/回调"],
+      messages: [
+        ["业务系统/前端", "任务服务", "创建审核任务"],
+        ["任务服务", "结果库/回调", "写入 aimod_task_info"],
+        ["任务服务", "AimodContext", "构建场景与规则上下文"],
+        ["AimodContext", "外部系统", "按 Handler 采集 HBX/SRM/SAP/EAM 数据"],
+        ["外部系统", "AimodContext", "返回结构化业务数据", "return"],
+        ["AimodContext", "OCR/AI-DS", "合并附件 OCR、规则和提示词"],
+        ["OCR/AI-DS", "结果库/回调", "写入规则级审核结果"],
+        ["任务服务", "结果库/回调", "人工复核、任务重跑、结果回调"],
+      ],
+    },
     detailSections: [
       {
         title: "业务定位",
@@ -185,6 +198,19 @@ const enterpriseProjects = [
       "参与合同文件生成、离线文件识别、定时任务补偿，提高合同创建和归档稳定性。",
     ],
     flow: ["拟定合同", "模板/文件处理", "保存签署方", "提交审批", "电子/线下签署", "文件归档", "检索与权限控制"],
+    sequence: {
+      lanes: ["用户/智能体", "合同服务", "文件/OCR", "流程中心", "签署服务", "归档/检索"],
+      messages: [
+        ["用户/智能体", "合同服务", "录入/生成合同草稿"],
+        ["合同服务", "文件/OCR", "生成 PDF、解析离线文件、提取印章"],
+        ["文件/OCR", "合同服务", "返回 fileId/OCR/签章位置", "return"],
+        ["合同服务", "流程中心", "提交审批流"],
+        ["流程中心", "合同服务", "审批通过/驳回回调", "return"],
+        ["合同服务", "签署服务", "发起电子签或线下签"],
+        ["签署服务", "合同服务", "同步签署状态", "return"],
+        ["合同服务", "归档/检索", "归档文件、更新可见范围与检索索引"],
+      ],
+    },
     detailSections: [
       {
         title: "业务定位",
@@ -644,13 +670,13 @@ function GateIntro({ entered, onEnter }) {
   const start = () => {
     if (opening) return;
     setOpening(true);
-    window.setTimeout(onEnter, reduced ? 80 : 1550);
+    window.setTimeout(onEnter, reduced ? 80 : 980);
   };
 
   return (
     <AnimatePresence>
       {!entered && (
-        <motion.section className={`gate-intro ${opening ? "opening" : ""}`} exit={{ opacity: 0 }} transition={{ duration: 0.7 }}>
+        <motion.section className={`gate-intro ${opening ? "opening" : ""}`} exit={{ opacity: 0 }} transition={{ duration: 0.42 }}>
           <img className="gate-world-image" src="/assets/generated/celestial-gate.png" alt="" aria-hidden="true" />
           <div className="gate-cinematic-shade" aria-hidden="true" />
           <div className="real-gate-stage" aria-hidden="true">
@@ -725,8 +751,8 @@ function Header() {
           </a>
         ))}
       </nav>
-      <a className="download" href={links.resume} download>
-        下载 PDF
+      <a className="download" href={links.resume} target="_blank" rel="noreferrer">
+        查看简历
       </a>
     </header>
   );
@@ -845,7 +871,7 @@ function EnterpriseProjects({ onDetail }) {
               <div className="panel-icon">
                 <Icon weight="duotone" />
               </div>
-              <div>
+              <div className="enterprise-copy">
                 <span>{project.label}</span>
                 <h3>{project.title}</h3>
                 <p>{project.summary}</p>
@@ -862,6 +888,9 @@ function EnterpriseProjects({ onDetail }) {
                 <button className="text-button" type="button" onClick={() => onDetail(project)}>
                   查看项目详情 <ArrowRight weight="bold" />
                 </button>
+              </div>
+              <div className="enterprise-diagram">
+                <SequenceDiagram project={project} />
               </div>
             </Reveal>
           );
@@ -900,6 +929,19 @@ function SequenceDiagram({ project }) {
     const index = Math.max(0, lanes.indexOf(lane));
     return ((index + 0.5) / lanes.length) * width;
   };
+  const laneLabelWidth = (lane) => Math.min(190, Math.max(116, [...lane].length * 11 + 34));
+  const splitLabel = (label) => {
+    const chars = [...label];
+    if (chars.length <= 15) return [label];
+    const mid = Math.ceil(chars.length / 2);
+    return [chars.slice(0, mid).join(""), chars.slice(mid).join("")];
+  };
+  const renderLabel = (label, x) =>
+    splitLabel(label).map((line, lineIndex) => (
+      <tspan key={line} x={x} dy={lineIndex === 0 ? 0 : 18}>
+        {line}
+      </tspan>
+    ));
 
   return (
     <div className="sequence-diagram" aria-label={`${project.title} 时序图`}>
@@ -911,9 +953,10 @@ function SequenceDiagram({ project }) {
         </defs>
         {lanes.map((lane) => {
           const x = laneX(lane);
+          const labelWidth = laneLabelWidth(lane);
           return (
             <g className="sequence-lane-svg" key={lane}>
-              <rect x={x - 58} y="8" width="116" height="30" rx="15" />
+              <rect x={x - labelWidth / 2} y="8" width={labelWidth} height="30" rx="15" />
               <text x={x} y="28" textAnchor="middle">
                 {lane}
               </text>
@@ -935,7 +978,7 @@ function SequenceDiagram({ project }) {
               <g className="sequence-message-svg self" key={`${label}-${index}`}>
                 <path d={`M ${x1} ${y} C ${x1 + loop} ${y}, ${x1 + loop} ${y + 24}, ${x1} ${y + 24}`} markerEnd={`url(#arrow-${project.id})`} />
                 <text x={Math.min(width - 110, x1 + loop * 0.58)} y={y - 8} textAnchor="middle">
-                  {label}
+                  {renderLabel(label, Math.min(width - 110, x1 + loop * 0.58))}
                 </text>
               </g>
             );
@@ -945,7 +988,7 @@ function SequenceDiagram({ project }) {
             <g className={`sequence-message-svg ${isReturn ? "return" : ""}`} key={`${label}-${index}`}>
               <line x1={x1} x2={x2} y1={y} y2={y} markerEnd={`url(#arrow-${project.id})`} />
               <text x={(x1 + x2) / 2} y={y - 8} textAnchor="middle">
-                {label}
+                {renderLabel(label, (x1 + x2) / 2)}
               </text>
             </g>
           );
@@ -1151,6 +1194,11 @@ function DetailModal({ item, onClose }) {
               {item.keyFacts.map((fact) => (
                 <span key={fact}>{fact}</span>
               ))}
+            </div>
+          )}
+          {(item.sequence || item.flow) && (
+            <div className="modal-diagram">
+              <SequenceDiagram project={item} />
             </div>
           )}
           <div className="modal-grid">
