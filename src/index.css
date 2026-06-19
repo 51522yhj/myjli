@@ -2,18 +2,22 @@
 
 :root {
   color-scheme: light;
-  --bg: oklch(1 0 0);
-  --surface: oklch(0.972 0.012 248);
-  --surface-strong: oklch(0.93 0.035 250);
+  --bg: oklch(0.965 0.028 236);
+  --surface: oklch(0.985 0.01 248 / 0.58);
+  --surface-strong: oklch(0.96 0.032 245 / 0.68);
   --ink: oklch(0.18 0.055 255);
   --muted: oklch(0.43 0.045 250);
   --primary: oklch(0.58 0.19 252);
   --primary-deep: oklch(0.34 0.15 252);
   --accent: oklch(0.82 0.12 215);
-  --line: oklch(0.86 0.035 248);
+  --line: oklch(1 0 0 / 0.48);
   --glow: oklch(0.78 0.14 228 / 0.44);
-  --shadow: 0 26px 90px oklch(0.58 0.19 252 / 0.16);
-  --radius: 18px;
+  --glass: oklch(1 0 0 / 0.36);
+  --glass-strong: oklch(1 0 0 / 0.58);
+  --glass-soft: oklch(0.92 0.05 236 / 0.22);
+  --glass-border: oklch(1 0 0 / 0.62);
+  --shadow: 0 24px 90px oklch(0.27 0.12 252 / 0.13);
+  --radius: 22px;
   font-family:
     "MiSans",
     "HarmonyOS Sans SC",
@@ -34,16 +38,48 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
   margin: 0;
   min-width: 320px;
   background:
-    radial-gradient(circle at 15% 12%, oklch(0.78 0.14 228 / 0.28), transparent 30rem),
-    radial-gradient(circle at 86% 4%, oklch(0.86 0.11 215 / 0.3), transparent 34rem),
-    linear-gradient(180deg, var(--bg), oklch(0.965 0.018 248));
+    radial-gradient(circle at 12% 8%, oklch(0.82 0.13 222 / 0.34), transparent 28rem),
+    radial-gradient(circle at 88% 6%, oklch(0.72 0.17 254 / 0.22), transparent 30rem),
+    radial-gradient(circle at 65% 82%, oklch(0.86 0.12 201 / 0.26), transparent 34rem),
+    linear-gradient(135deg, oklch(0.98 0.018 230), oklch(0.92 0.045 244) 52%, oklch(0.98 0.012 222));
   color: var(--ink);
+  overflow-x: hidden;
+}
+
+body::before,
+body::after {
+  position: fixed;
+  z-index: -4;
+  pointer-events: none;
+  content: "";
+}
+
+body::before {
+  inset: -20%;
+  background:
+    radial-gradient(circle at 18% 24%, oklch(0.84 0.13 225 / 0.34), transparent 19rem),
+    radial-gradient(circle at 72% 18%, oklch(0.68 0.18 260 / 0.2), transparent 22rem),
+    radial-gradient(circle at 52% 78%, oklch(0.91 0.09 198 / 0.28), transparent 26rem);
+  filter: blur(10px);
+  animation: backgroundAurora 18s ease-in-out infinite alternate;
+}
+
+body::after {
+  inset: 0;
+  background-image:
+    linear-gradient(oklch(1 0 0 / 0.18) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(1 0 0 / 0.15) 1px, transparent 1px),
+    radial-gradient(circle, oklch(1 0 0 / 0.8) 0 1px, transparent 1.6px);
+  background-size: 76px 76px, 76px 76px, 118px 118px;
+  mask-image: linear-gradient(180deg, black, transparent 88%);
+  opacity: 0.62;
 }
 
 body::selection {
@@ -83,9 +119,10 @@ button {
   gap: 1rem;
   height: 76px;
   padding: 0 clamp(1rem, 4vw, 4.8rem);
-  background: oklch(1 0 0 / 0.78);
-  border-bottom: 1px solid oklch(0.88 0.024 248 / 0.65);
-  backdrop-filter: blur(22px) saturate(160%);
+  background: linear-gradient(90deg, oklch(1 0 0 / 0.5), oklch(0.9 0.04 236 / 0.26), oklch(1 0 0 / 0.48));
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: 0 12px 40px oklch(0.35 0.11 250 / 0.08);
+  backdrop-filter: blur(28px) saturate(170%);
 }
 
 .brand,
@@ -107,10 +144,13 @@ button {
   width: 42px;
   height: 42px;
   place-items: center;
-  border-radius: 14px;
-  background: var(--primary);
+  border: 1px solid oklch(1 0 0 / 0.62);
+  border-radius: 16px;
+  background:
+    linear-gradient(145deg, oklch(1 0 0 / 0.55), oklch(0.62 0.17 252 / 0.78)),
+    var(--primary);
   color: white;
-  box-shadow: 0 14px 34px oklch(0.58 0.19 252 / 0.24);
+  box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.7), 0 14px 34px oklch(0.58 0.19 252 / 0.18);
 }
 
 .site-header nav {
@@ -125,15 +165,19 @@ button {
 }
 
 .site-header nav a:hover {
-  background: oklch(0.94 0.025 248 / 0.82);
+  background: var(--glass-strong);
   color: var(--ink);
 }
 
 .download {
   justify-self: end;
   padding: 0 1.2rem;
-  background: var(--primary);
+  border: 1px solid oklch(1 0 0 / 0.58);
+  background:
+    linear-gradient(135deg, oklch(1 0 0 / 0.3), oklch(0.58 0.19 252 / 0.9)),
+    var(--primary);
   color: white;
+  box-shadow: 0 16px 34px oklch(0.42 0.16 252 / 0.18);
 }
 
 .gate-intro {
@@ -143,8 +187,26 @@ button {
   display: grid;
   place-items: center;
   overflow: hidden;
-  background: #051a35;
+  background:
+    radial-gradient(circle at 50% 38%, oklch(1 0 0 / 0.64), transparent 14rem),
+    radial-gradient(circle at 27% 22%, oklch(0.83 0.14 224 / 0.42), transparent 24rem),
+    radial-gradient(circle at 74% 24%, oklch(0.68 0.18 255 / 0.34), transparent 26rem),
+    linear-gradient(135deg, oklch(0.96 0.03 226), oklch(0.82 0.09 245) 54%, oklch(0.96 0.02 218));
   perspective: 2200px;
+}
+
+.gate-intro::before {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image:
+    linear-gradient(oklch(1 0 0 / 0.22) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(1 0 0 / 0.18) 1px, transparent 1px),
+    radial-gradient(circle, oklch(1 0 0 / 0.86) 0 1.4px, transparent 2px);
+  background-size: 84px 84px, 84px 84px, 126px 126px;
+  content: "";
+  opacity: 0.72;
+  transform: translateZ(-120px);
 }
 
 .gate-intro::after {
@@ -153,7 +215,7 @@ button {
   width: 18vmin;
   height: 64vmin;
   border-radius: 999px;
-  background: radial-gradient(ellipse, white 0 18%, oklch(0.86 0.16 225 / 0.9) 40%, transparent 72%);
+  background: radial-gradient(ellipse, white 0 16%, oklch(0.86 0.16 225 / 0.86) 42%, transparent 72%);
   opacity: 0;
   pointer-events: none;
   transform: scale(0.2);
@@ -171,6 +233,7 @@ button {
   height: 100%;
   object-fit: cover;
   object-position: center center;
+  opacity: 0;
   transform: scale(1.035);
   transition:
     transform 1s cubic-bezier(0.2, 0.9, 0.2, 1),
@@ -183,8 +246,8 @@ button {
   inset: 0;
   z-index: 2;
   background:
-    radial-gradient(ellipse at 50% 46%, transparent 0 34%, oklch(0.09 0.05 255 / 0.16) 72%),
-    linear-gradient(180deg, oklch(0.08 0.06 255 / 0.18), transparent 24%, transparent 68%, oklch(0.08 0.05 255 / 0.32));
+    radial-gradient(ellipse at 50% 46%, transparent 0 34%, oklch(0.18 0.08 255 / 0.16) 72%),
+    linear-gradient(180deg, oklch(1 0 0 / 0.3), transparent 24%, transparent 68%, oklch(0.56 0.12 248 / 0.2));
   pointer-events: none;
 }
 
@@ -199,13 +262,11 @@ button {
 .real-door {
   position: absolute;
   inset: 0;
-  background-image: url("/assets/generated/celestial-gate.png");
-  background-size: cover;
-  background-position: center center;
-  filter:
-    drop-shadow(0 0 18px oklch(0.68 0.17 230 / 0.5))
-    saturate(1.08);
-  opacity: 0;
+  background:
+    linear-gradient(105deg, oklch(1 0 0 / 0.5), oklch(0.82 0.08 234 / 0.22) 45%, oklch(1 0 0 / 0.34)),
+    radial-gradient(circle at 50% 12%, oklch(1 0 0 / 0.5), transparent 16rem);
+  filter: drop-shadow(0 0 28px oklch(0.68 0.17 230 / 0.32));
+  opacity: 0.62;
   transform: translateZ(26px);
   transform-style: preserve-3d;
   backface-visibility: hidden;
@@ -226,25 +287,27 @@ button {
 
 .real-door::before {
   background:
-    linear-gradient(90deg, oklch(0.18 0.05 250 / 0.52), transparent 12%, transparent 88%, oklch(0.18 0.05 250 / 0.46)),
-    linear-gradient(180deg, oklch(1 0 0 / 0.22), transparent 28%, oklch(0.55 0.11 245 / 0.2));
-  mix-blend-mode: multiply;
+    linear-gradient(90deg, oklch(1 0 0 / 0.2), transparent 16%, transparent 84%, oklch(1 0 0 / 0.2)),
+    linear-gradient(180deg, oklch(1 0 0 / 0.32), transparent 34%, oklch(0.64 0.14 235 / 0.2));
+  border: 1px solid oklch(1 0 0 / 0.38);
+  backdrop-filter: blur(26px) saturate(155%);
+  mix-blend-mode: screen;
 }
 
 .real-door::after {
   background:
-    linear-gradient(90deg, transparent 42%, oklch(1 0 0 / 0.65) 50%, transparent 58%),
-    radial-gradient(circle at 50% 13%, oklch(0.88 0.16 225 / 0.48), transparent 16%);
+    linear-gradient(90deg, transparent 41%, oklch(1 0 0 / 0.58) 50%, transparent 59%),
+    radial-gradient(circle at 50% 13%, oklch(0.88 0.16 225 / 0.42), transparent 16%);
   mix-blend-mode: screen;
 }
 
 .real-door-left {
-  clip-path: polygon(31% 12%, 49.95% 2.2%, 50.2% 83.5%, 29.3% 85.8%, 27.6% 74%, 29.8% 39%);
+  clip-path: ellipse(26% 43% at 49% 49%);
   transform-origin: 49.8% 48%;
 }
 
 .real-door-right {
-  clip-path: polygon(50.05% 2.2%, 69% 12%, 70.2% 39%, 72.3% 74%, 70.7% 85.8%, 49.8% 83.5%);
+  clip-path: ellipse(26% 43% at 51% 49%);
   transform-origin: 50.2% 48%;
 }
 
@@ -325,7 +388,7 @@ button {
 .entry-portal {
   z-index: 6;
   background:
-    radial-gradient(ellipse at 50% 48%, oklch(1 0 0 / 0.56) 0 8%, oklch(0.8 0.17 228 / 0.28) 18%, transparent 35%),
+    radial-gradient(ellipse at 50% 48%, oklch(1 0 0 / 0.72) 0 8%, oklch(0.8 0.17 228 / 0.3) 19%, transparent 35%),
     conic-gradient(from 32deg at 50% 48%, transparent, oklch(0.72 0.2 230 / 0.24), transparent, oklch(0.92 0.09 95 / 0.18), transparent);
   filter: blur(0.4px);
   transform: translateZ(60px);
@@ -339,7 +402,7 @@ button {
 }
 
 .gate-intro.opening .gate-world-image {
-  opacity: 0.9;
+  opacity: 0;
   filter: blur(5px) brightness(1.22) saturate(1.14);
   transform: scale(1.18) translateY(1.2vh);
 }
@@ -351,7 +414,7 @@ button {
     drop-shadow(0 0 42px oklch(0.82 0.16 230 / 0.96))
     brightness(1.45)
     saturate(1.2);
-  transform: translateX(-2vw) translateY(-0.3vh) translateZ(90px) scaleX(0.82) scaleY(1.06);
+  transform: translateX(-7vw) translateY(-0.3vh) translateZ(90px) scaleX(0.84) scaleY(1.02);
   transition: transform 0.7s cubic-bezier(0.2, 0.9, 0.2, 1), opacity 0.42s ease, filter 0.55s ease;
 }
 
@@ -362,7 +425,7 @@ button {
     drop-shadow(0 0 42px oklch(0.82 0.16 230 / 0.96))
     brightness(1.45)
     saturate(1.2);
-  transform: translateX(2vw) translateY(-0.3vh) translateZ(90px) scaleX(0.82) scaleY(1.06);
+  transform: translateX(7vw) translateY(-0.3vh) translateZ(90px) scaleX(0.84) scaleY(1.02);
   transition: transform 0.7s cubic-bezier(0.2, 0.9, 0.2, 1), opacity 0.42s ease, filter 0.55s ease;
 }
 
@@ -398,11 +461,17 @@ button {
   z-index: 24;
   width: min(880px, calc(100vw - 2rem));
   margin: 0 auto;
+  border: 1px solid oklch(1 0 0 / 0.45);
+  border-radius: 28px;
+  background:
+    linear-gradient(135deg, oklch(1 0 0 / 0.32), oklch(1 0 0 / 0.14)),
+    radial-gradient(circle at 50% 0%, oklch(0.86 0.12 228 / 0.22), transparent 18rem);
+  padding: clamp(1.5rem, 4vw, 2.4rem);
   text-align: center;
   color: white;
-  text-shadow:
-    0 2px 10px oklch(0.05 0.04 250 / 0.4),
-    0 24px 60px oklch(0.08 0.08 252 / 0.44);
+  box-shadow: 0 30px 110px oklch(0.25 0.11 252 / 0.14), inset 0 1px 0 oklch(1 0 0 / 0.56);
+  text-shadow: 0 12px 48px oklch(0.08 0.08 252 / 0.24);
+  backdrop-filter: blur(30px) saturate(160%);
   transition:
     transform 0.8s ease,
     opacity 0.8s ease,
@@ -433,35 +502,32 @@ button {
 
 .gate-copy h1 {
   margin-top: 0.65rem;
-  color: oklch(0.98 0.015 235);
+  color: var(--ink);
   font-size: clamp(2.25rem, 5.2vw, 4.75rem);
   line-height: 0.92;
   letter-spacing: 0.09em;
-  text-shadow:
-    0 1px 0 oklch(1 0 0 / 0.88),
-    0 0 26px oklch(0.72 0.18 230 / 0.54),
-    0 24px 60px oklch(0.04 0.04 252 / 0.5);
+  text-shadow: 0 0 26px oklch(1 0 0 / 0.7), 0 24px 60px oklch(0.34 0.15 252 / 0.22);
   white-space: nowrap;
 }
 
 .gate-copy p {
   margin: 1.1rem auto 1.45rem;
   max-width: 54ch;
-  color: oklch(0.96 0.02 235 / 0.92);
+  color: var(--primary-deep);
   font-size: clamp(1rem, 2vw, 1.25rem);
   font-weight: 850;
   line-height: 1.7;
 }
 
 .fantasy-copy > span {
-  color: oklch(0.98 0.06 93);
-  text-shadow: 0 0 22px oklch(0.86 0.13 90 / 0.65), 0 2px 16px oklch(0.05 0.04 250 / 0.5);
+  color: oklch(0.62 0.17 252);
+  text-shadow: 0 0 22px oklch(1 0 0 / 0.68);
 }
 
 .fantasy-copy small {
   display: block;
   margin-top: 0.9rem;
-  color: oklch(0.96 0.035 230 / 0.86);
+  color: oklch(0.34 0.06 252 / 0.7);
   font-weight: 800;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -473,11 +539,11 @@ button {
   justify-content: center;
   border: 0;
   background: transparent;
-  color: oklch(0.98 0.06 93);
+  color: oklch(0.62 0.17 252);
   text-decoration: none;
   backdrop-filter: none;
   box-shadow: none;
-  text-shadow: 0 0 22px oklch(0.86 0.13 90 / 0.52);
+  text-shadow: 0 0 22px oklch(1 0 0 / 0.72);
 }
 
 .magnetic-button.enter-world-button::after {
@@ -487,7 +553,7 @@ button {
 .magnetic-button.enter-world-button:hover {
   background: transparent;
   box-shadow: none;
-  color: oklch(1 0.075 93);
+  color: var(--primary-deep);
   text-shadow:
     0 0 18px oklch(0.98 0.08 92 / 0.8),
     0 0 40px oklch(0.82 0.13 90 / 0.5);
@@ -501,16 +567,20 @@ button {
   gap: 0.5rem;
   border: 0;
   border-radius: 999px;
-  background: var(--primary);
+  border: 1px solid oklch(1 0 0 / 0.58);
+  background:
+    linear-gradient(135deg, oklch(1 0 0 / 0.25), oklch(0.58 0.19 252 / 0.86)),
+    var(--primary);
   padding: 0 1.35rem;
   color: white;
   font-weight: 900;
-  box-shadow: 0 14px 34px oklch(0.58 0.19 252 / 0.24);
+  box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.5), 0 14px 34px oklch(0.58 0.19 252 / 0.18);
   cursor: pointer;
+  backdrop-filter: blur(20px) saturate(160%);
 }
 
 .button-soft {
-  background: oklch(1 0 0 / 0.78);
+  background: var(--glass-strong);
   color: var(--ink);
 }
 
@@ -527,10 +597,10 @@ button {
   overflow: hidden;
   isolation: isolate;
   background:
-    radial-gradient(circle at 53% 50%, oklch(1 0 0 / 0.86) 0 7%, oklch(0.82 0.12 228 / 0.28) 18%, transparent 37%),
-    radial-gradient(circle at 82% 18%, oklch(0.77 0.15 236 / 0.28), transparent 34rem),
-    radial-gradient(circle at 18% 78%, oklch(0.84 0.1 218 / 0.24), transparent 30rem),
-    linear-gradient(135deg, oklch(0.96 0.038 246), oklch(0.99 0.012 238) 46%, oklch(0.91 0.054 235));
+    radial-gradient(circle at 54% 48%, oklch(1 0 0 / 0.78) 0 7%, oklch(0.82 0.12 228 / 0.32) 19%, transparent 39%),
+    radial-gradient(circle at 82% 18%, oklch(0.77 0.15 236 / 0.22), transparent 34rem),
+    radial-gradient(circle at 18% 78%, oklch(0.84 0.1 218 / 0.2), transparent 30rem),
+    linear-gradient(135deg, oklch(0.96 0.038 246 / 0.72), oklch(0.99 0.012 238 / 0.74) 46%, oklch(0.91 0.054 235 / 0.72));
   padding: 7rem clamp(1rem, 5vw, 5.5rem) 4rem;
 }
 
@@ -546,7 +616,7 @@ button {
   z-index: -1;
   background:
     radial-gradient(circle, oklch(1 0 0 / 0.72) 0 1px, transparent 1.8px),
-    radial-gradient(circle, oklch(0.63 0.16 245 / 0.42) 0 1px, transparent 2px);
+    radial-gradient(circle, oklch(0.63 0.16 245 / 0.32) 0 1px, transparent 2px);
   background-size: 78px 78px, 126px 126px;
   background-position: 0 0, 28px 34px;
   mask-image: radial-gradient(ellipse at 50% 45%, black 0 62%, transparent 86%);
@@ -558,7 +628,7 @@ button {
   z-index: -1;
   width: min(92vw, 1120px);
   height: min(92vw, 1120px);
-  border: 9px solid oklch(1 0 0 / 0.5);
+  border: 9px solid oklch(1 0 0 / 0.36);
   border-radius: 50%;
   box-shadow:
     inset 0 0 80px oklch(0.78 0.13 230 / 0.18),
@@ -571,7 +641,7 @@ button {
   position: absolute;
   inset: 0;
   z-index: -2;
-  opacity: 0.24;
+  opacity: 0.08;
   mix-blend-mode: screen;
 }
 
@@ -640,16 +710,18 @@ button {
   z-index: 3;
   width: min(390px, 76vw);
   aspect-ratio: 0.72;
-  border-radius: 18px;
+  border: 1px solid oklch(1 0 0 / 0.66);
+  border-radius: 26px;
   object-fit: cover;
   object-position: center 18%;
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow), inset 0 1px 0 oklch(1 0 0 / 0.52);
 }
 
 .portrait-orbit {
   position: absolute;
-  border: 1px solid oklch(0.72 0.13 230 / 0.32);
+  border: 1px solid oklch(1 0 0 / 0.42);
   border-radius: 999px;
+  box-shadow: 0 0 30px oklch(0.78 0.14 228 / 0.2);
   animation: orbit 14s linear infinite;
 }
 
@@ -673,11 +745,14 @@ button {
   bottom: 3rem;
   z-index: 4;
   width: min(430px, 84vw);
-  border: 1px solid oklch(1 0 0 / 0.72);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius);
-  background: oklch(1 0 0 / 0.74);
+  background:
+    linear-gradient(135deg, oklch(1 0 0 / 0.56), oklch(1 0 0 / 0.22)),
+    radial-gradient(circle at 10% 0%, oklch(0.83 0.13 228 / 0.18), transparent 13rem);
   padding: 1.25rem;
-  backdrop-filter: blur(22px) saturate(160%);
+  box-shadow: 0 20px 70px oklch(0.28 0.12 252 / 0.12), inset 0 1px 0 oklch(1 0 0 / 0.6);
+  backdrop-filter: blur(28px) saturate(160%);
 }
 
 .focus-panel span {
@@ -779,18 +854,46 @@ button {
 .vibe-shell,
 .skill-stage,
 .skill-proof {
-  border: 1px solid oklch(0.86 0.035 248 / 0.72);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius);
   background:
-    linear-gradient(135deg, oklch(1 0 0 / 0.72), oklch(0.95 0.028 244 / 0.62)),
-    url("/assets/generated/detail-texture.svg");
+    linear-gradient(135deg, oklch(1 0 0 / 0.52), oklch(1 0 0 / 0.18)),
+    radial-gradient(circle at 18% 0%, oklch(0.86 0.12 228 / 0.24), transparent 22rem),
+    radial-gradient(circle at 100% 100%, oklch(0.7 0.16 255 / 0.12), transparent 20rem);
   background-size: cover;
-  box-shadow: 0 10px 24px oklch(0.34 0.15 252 / 0.08);
-  backdrop-filter: blur(18px) saturate(150%);
+  box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.62), 0 22px 80px oklch(0.27 0.12 252 / 0.1);
+  backdrop-filter: blur(30px) saturate(165%);
+}
+
+.work-node > div::before,
+.enterprise-panel::before,
+.project-panel::before,
+.vibe-shell::before,
+.skill-stage::before,
+.skill-proof::before {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(120deg, oklch(1 0 0 / 0.46), transparent 32%, transparent 70%, oklch(1 0 0 / 0.16)),
+    radial-gradient(circle at 12% 8%, oklch(1 0 0 / 0.32), transparent 12rem);
+  content: "";
+  pointer-events: none;
 }
 
 .work-node > div {
   padding: clamp(1.2rem, 3vw, 2rem);
+}
+
+.work-node > div > *,
+.enterprise-panel > *,
+.project-panel > *,
+.vibe-shell > *,
+.skill-stage > *,
+.skill-proof > * {
+  position: relative;
+  z-index: 1;
 }
 
 .work-node h3,
@@ -846,7 +949,8 @@ button {
   min-height: 32px;
   align-items: center;
   border-radius: 999px;
-  background: oklch(0.94 0.04 245 / 0.82);
+  border: 1px solid oklch(1 0 0 / 0.48);
+  background: oklch(1 0 0 / 0.34);
   padding: 0.35rem 0.72rem;
   color: var(--primary-deep);
   font-size: 0.86rem;
@@ -866,9 +970,9 @@ button {
   display: inline-flex;
   align-items: center;
   min-height: 34px;
-  border: 1px solid oklch(0.75 0.08 240 / 0.42);
+  border: 1px solid oklch(1 0 0 / 0.52);
   border-radius: 999px;
-  background: linear-gradient(135deg, oklch(1 0 0 / 0.82), oklch(0.88 0.06 240 / 0.55));
+  background: linear-gradient(135deg, oklch(1 0 0 / 0.52), oklch(0.88 0.06 240 / 0.22));
   padding: 0.38rem 0.76rem;
   color: oklch(0.28 0.08 252);
   font-size: 0.84rem;
@@ -889,14 +993,27 @@ button {
   padding: clamp(1.3rem, 4vw, 2.8rem);
 }
 
+.enterprise-copy,
+.enterprise-diagram,
+.project-copy,
+.project-panel > .sequence-diagram,
+.vibe-copy,
+.image-carousel {
+  min-width: 0;
+}
+
 .panel-icon {
   display: grid;
   width: 70px;
   height: 70px;
   place-items: center;
+  border: 1px solid oklch(1 0 0 / 0.58);
   border-radius: var(--radius);
-  background: var(--primary);
+  background:
+    linear-gradient(135deg, oklch(1 0 0 / 0.34), oklch(0.58 0.19 252 / 0.78)),
+    var(--primary);
   color: white;
+  box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.6), 0 18px 42px oklch(0.42 0.16 252 / 0.14);
 }
 
 .panel-icon svg {
@@ -912,10 +1029,10 @@ button {
 .enterprise-diagram .sequence-diagram {
   min-height: 360px;
   background:
-    linear-gradient(90deg, oklch(0.76 0.12 238 / 0.09) 1px, transparent 1px),
-    linear-gradient(180deg, oklch(0.76 0.12 238 / 0.08) 1px, transparent 1px),
-    radial-gradient(circle at 50% 0%, oklch(0.84 0.11 225 / 0.2), transparent 15rem),
-    linear-gradient(135deg, oklch(1 0 0 / 0.82), oklch(0.94 0.032 245 / 0.72));
+    linear-gradient(90deg, oklch(1 0 0 / 0.2) 1px, transparent 1px),
+    linear-gradient(180deg, oklch(1 0 0 / 0.16) 1px, transparent 1px),
+    radial-gradient(circle at 50% 0%, oklch(0.84 0.11 225 / 0.24), transparent 15rem),
+    linear-gradient(135deg, oklch(1 0 0 / 0.38), oklch(0.86 0.055 245 / 0.24));
 }
 
 .modal-diagram {
@@ -968,10 +1085,11 @@ button {
 
 .flow-step {
   min-height: 105px;
-  border: 1px solid oklch(0.78 0.09 235 / 0.42);
-  border-radius: 14px;
-  background: oklch(1 0 0 / 0.62);
+  border: 1px solid oklch(1 0 0 / 0.46);
+  border-radius: 16px;
+  background: oklch(1 0 0 / 0.32);
   padding: 0.8rem;
+  backdrop-filter: blur(20px) saturate(150%);
 }
 
 .flow-step span {
@@ -990,15 +1108,17 @@ button {
   position: relative;
   min-height: 420px;
   overflow: auto;
-  border: 1px solid oklch(0.82 0.055 245 / 0.7);
-  border-radius: 18px;
+  border: 1px solid oklch(1 0 0 / 0.56);
+  border-radius: 20px;
   background:
-    linear-gradient(90deg, oklch(0.76 0.12 238 / 0.12) 1px, transparent 1px),
-    linear-gradient(180deg, oklch(0.76 0.12 238 / 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(1 0 0 / 0.19) 1px, transparent 1px),
+    linear-gradient(180deg, oklch(1 0 0 / 0.15) 1px, transparent 1px),
     radial-gradient(circle at 50% 0%, oklch(0.78 0.13 230 / 0.22), transparent 18rem),
-    linear-gradient(135deg, oklch(1 0 0 / 0.9), oklch(0.94 0.032 245 / 0.84));
+    linear-gradient(135deg, oklch(1 0 0 / 0.46), oklch(0.9 0.04 245 / 0.3));
   background-size: 42px 42px, 42px 42px, auto, auto;
   padding: 0.6rem;
+  box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.62);
+  backdrop-filter: blur(26px) saturate(155%);
 }
 
 .sequence-svg {
@@ -1013,8 +1133,8 @@ button {
 }
 
 .sequence-lane-svg rect {
-  fill: oklch(1 0 0 / 0.86);
-  stroke: oklch(0.78 0.08 240 / 0.58);
+  fill: oklch(1 0 0 / 0.56);
+  stroke: oklch(1 0 0 / 0.68);
   stroke-width: 1.5;
   filter: drop-shadow(0 7px 14px oklch(0.34 0.15 252 / 0.08));
 }
@@ -1073,7 +1193,8 @@ button {
   white-space: nowrap;
   border: 0;
   border-radius: 999px;
-  background: oklch(1 0 0 / 0.62);
+  border: 1px solid oklch(1 0 0 / 0.48);
+  background: oklch(1 0 0 / 0.32);
   padding: 0 1rem;
   color: var(--muted);
   font-weight: 850;
@@ -1081,7 +1202,9 @@ button {
 }
 
 .vibe-nav button.active {
-  background: var(--primary);
+  background:
+    linear-gradient(135deg, oklch(1 0 0 / 0.28), oklch(0.58 0.19 252 / 0.86)),
+    var(--primary);
   color: white;
 }
 
@@ -1113,16 +1236,19 @@ button {
   overflow: hidden;
   border-radius: var(--radius);
   background:
-    radial-gradient(circle at 50% 0%, oklch(0.83 0.13 228 / 0.24), transparent 28rem),
-    oklch(0.97 0.018 248);
+    radial-gradient(circle at 50% 0%, oklch(0.83 0.13 228 / 0.28), transparent 28rem),
+    linear-gradient(135deg, oklch(1 0 0 / 0.42), oklch(0.86 0.052 245 / 0.22));
+  border: 1px solid oklch(1 0 0 / 0.52);
+  backdrop-filter: blur(26px) saturate(150%);
 }
 
 .image-carousel img {
   max-width: 96%;
   max-height: min(420px, 37vh);
-  border-radius: 14px;
+  border: 1px solid oklch(1 0 0 / 0.5);
+  border-radius: 16px;
   object-fit: contain;
-  box-shadow: 0 18px 42px oklch(0.18 0.055 255 / 0.12);
+  box-shadow: 0 18px 42px oklch(0.18 0.055 255 / 0.12), inset 0 1px 0 oklch(1 0 0 / 0.5);
 }
 
 .carousel-arrows {
@@ -1141,9 +1267,9 @@ button {
   min-height: 44px;
   align-items: center;
   gap: 0.35rem;
-  border: 1px solid oklch(0.82 0.05 246 / 0.68);
+  border: 1px solid oklch(1 0 0 / 0.58);
   border-radius: 999px;
-  background: oklch(1 0 0 / 0.82);
+  background: oklch(1 0 0 / 0.42);
   padding: 0 0.9rem;
   color: var(--primary-deep);
   font-weight: 900;
@@ -1185,9 +1311,9 @@ button {
   overflow: hidden;
   padding: clamp(1.4rem, 3vw, 2.2rem);
   background:
-    radial-gradient(circle at 50% 50%, oklch(1 0 0 / 0.88) 0 9%, oklch(0.8 0.13 228 / 0.26) 24%, transparent 45%),
-    conic-gradient(from 18deg at 50% 50%, transparent, oklch(0.7 0.18 236 / 0.13), transparent, oklch(0.9 0.09 92 / 0.13), transparent),
-    linear-gradient(135deg, oklch(1 0 0 / 0.74), oklch(0.91 0.043 238 / 0.66));
+    radial-gradient(circle at 50% 50%, oklch(1 0 0 / 0.76) 0 9%, oklch(0.8 0.13 228 / 0.28) 24%, transparent 45%),
+    conic-gradient(from 18deg at 50% 50%, transparent, oklch(0.7 0.18 236 / 0.14), transparent, oklch(0.9 0.09 92 / 0.12), transparent),
+    linear-gradient(135deg, oklch(1 0 0 / 0.36), oklch(0.91 0.043 238 / 0.24));
 }
 
 .skill-core {
@@ -1198,7 +1324,10 @@ button {
   height: clamp(150px, 15vw, 190px);
   place-items: center;
   border-radius: 50%;
-  background: var(--primary);
+  border: 1px solid oklch(1 0 0 / 0.6);
+  background:
+    linear-gradient(145deg, oklch(1 0 0 / 0.24), oklch(0.58 0.19 252 / 0.88)),
+    var(--primary);
   color: white;
   text-align: center;
   box-shadow: 0 30px 90px oklch(0.58 0.19 252 / 0.28);
@@ -1250,14 +1379,16 @@ button {
   justify-content: center;
   transform: rotate(var(--angle)) translateX(min(22vw, 220px)) rotate(calc(-1 * var(--angle))) translate(-50%, -50%);
   border-radius: 999px;
-  background: oklch(1 0 0 / 0.78);
+  border: 1px solid oklch(1 0 0 / 0.52);
+  background: oklch(1 0 0 / 0.38);
   padding: 0.5rem 0.85rem;
   color: var(--primary-deep);
   font-size: clamp(0.86rem, 1.1vw, 1rem);
   font-weight: 900;
   white-space: nowrap;
   pointer-events: auto;
-  box-shadow: 0 12px 28px oklch(0.34 0.15 252 / 0.1);
+  box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.62), 0 12px 28px oklch(0.34 0.15 252 / 0.08);
+  backdrop-filter: blur(20px) saturate(150%);
 }
 
 .skill-proof {
@@ -1273,8 +1404,8 @@ button {
   display: grid;
   place-items: center;
   padding: 1rem;
-  background: oklch(0.12 0.04 250 / 0.46);
-  backdrop-filter: blur(18px);
+  background: oklch(0.16 0.06 250 / 0.28);
+  backdrop-filter: blur(26px) saturate(130%);
 }
 
 .detail-modal {
@@ -1282,14 +1413,16 @@ button {
   width: min(1180px, 100%);
   max-height: 88dvh;
   overflow: auto;
-  border: 1px solid oklch(1 0 0 / 0.72);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius);
   background:
-    linear-gradient(135deg, oklch(1 0 0 / 0.92), oklch(0.92 0.035 245 / 0.88)),
-    url("/assets/generated/detail-texture.svg");
+    linear-gradient(135deg, oklch(1 0 0 / 0.62), oklch(1 0 0 / 0.28)),
+    radial-gradient(circle at 14% 0%, oklch(0.82 0.13 228 / 0.24), transparent 22rem),
+    radial-gradient(circle at 100% 100%, oklch(0.68 0.17 255 / 0.16), transparent 22rem);
   background-size: cover;
   padding: clamp(1.2rem, 4vw, 2.4rem);
-  box-shadow: 0 34px 90px oklch(0.08 0 0 / 0.34);
+  box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.66), 0 34px 100px oklch(0.08 0 0 / 0.22);
+  backdrop-filter: blur(32px) saturate(165%);
 }
 
 .modal-close {
@@ -1302,7 +1435,7 @@ button {
   place-items: center;
   border: 0;
   border-radius: 999px;
-  background: oklch(1 0 0 / 0.86);
+  background: oklch(1 0 0 / 0.48);
   color: var(--ink);
   cursor: pointer;
 }
@@ -1322,10 +1455,11 @@ button {
 .modal-grid section,
 .modal-flow,
 .detail-sections section {
-  border: 1px solid oklch(0.82 0.05 246 / 0.62);
-  border-radius: 14px;
-  background: oklch(1 0 0 / 0.58);
+  border: 1px solid oklch(1 0 0 / 0.5);
+  border-radius: 16px;
+  background: oklch(1 0 0 / 0.28);
   padding: 1rem;
+  backdrop-filter: blur(20px) saturate(150%);
 }
 
 .modal-grid h4,
@@ -1363,7 +1497,7 @@ button {
   position: absolute;
   inset: 0 0 auto;
   height: 3px;
-  background: linear-gradient(90deg, var(--primary), oklch(0.88 0.12 92), transparent);
+  background: linear-gradient(90deg, oklch(1 0 0 / 0.72), var(--primary), transparent);
 }
 
 .repo-link {
@@ -1384,8 +1518,9 @@ button {
 }
 
 .modal-flow div {
-  border-radius: 12px;
-  background: oklch(0.96 0.025 248 / 0.78);
+  border: 1px solid oklch(1 0 0 / 0.45);
+  border-radius: 14px;
+  background: oklch(1 0 0 / 0.26);
   padding: 0.8rem;
 }
 
@@ -1409,7 +1544,7 @@ button {
   width: min(1380px, calc(100% - 2rem));
   margin: 0 auto;
   padding: 2rem 0 3rem;
-  border-top: 1px solid var(--line);
+  border-top: 1px solid oklch(1 0 0 / 0.38);
   color: var(--muted);
 }
 
@@ -1420,6 +1555,20 @@ button {
 @keyframes orbit {
   to {
     rotate: 360deg;
+  }
+}
+
+@keyframes backgroundAurora {
+  0% {
+    transform: translate3d(-1.5%, -1%, 0) scale(1);
+  }
+
+  50% {
+    transform: translate3d(1.5%, 1.2%, 0) scale(1.04);
+  }
+
+  100% {
+    transform: translate3d(2%, -0.4%, 0) scale(1.02);
   }
 }
 
@@ -1518,7 +1667,9 @@ button {
   }
 
   .enterprise-panel {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+    min-width: 0;
   }
 
   .vibe-content {
