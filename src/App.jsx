@@ -12,6 +12,13 @@ import {
   Sparkle,
   X,
 } from "@phosphor-icons/react";
+import {
+  ArrowRight as LucideArrowRight,
+  FileText,
+  Link as LucideLink,
+  Mail,
+  Phone,
+} from "lucide-react";
 import { AnimatePresence, motion, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
 import "./index.css";
 
@@ -739,7 +746,7 @@ function MagneticButton({ children, href, onClick, className = "" }) {
 
 function Header() {
   return (
-    <header className="site-header">
+    <header className="site-header liquid-glass">
       <a className="brand" href="#top" aria-label="回到首页">
         <span>Y</span>
         Yuhaojun
@@ -751,7 +758,7 @@ function Header() {
           </a>
         ))}
       </nav>
-      <a className="download" href={links.resume} target="_blank" rel="noreferrer">
+      <a className="download liquid-glass" href={links.resume} target="_blank" rel="noreferrer">
         查看简历
       </a>
     </header>
@@ -775,45 +782,135 @@ function Reveal({ children, className = "", delay = 0 }) {
 
 function Hero() {
   const ref = useRef(null);
+  const videoRef = useRef(null);
+  const fadeFrameRef = useRef(null);
+  const fadingOutRef = useRef(false);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], [0, 130]);
   const scale = useTransform(scrollYProgress, [0, 1], [1, 0.92]);
 
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return undefined;
+
+    const cancelFade = () => {
+      if (fadeFrameRef.current) {
+        cancelAnimationFrame(fadeFrameRef.current);
+        fadeFrameRef.current = null;
+      }
+    };
+
+    const fadeTo = (targetOpacity, duration = 500) => {
+      cancelFade();
+      const startOpacity = Number.parseFloat(video.style.opacity || "0");
+      const startedAt = performance.now();
+
+      const tick = (now) => {
+        const progress = Math.min((now - startedAt) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        video.style.opacity = String(startOpacity + (targetOpacity - startOpacity) * eased);
+
+        if (progress < 1) {
+          fadeFrameRef.current = requestAnimationFrame(tick);
+        } else {
+          fadeFrameRef.current = null;
+        }
+      };
+
+      fadeFrameRef.current = requestAnimationFrame(tick);
+    };
+
+    const playFromStart = () => {
+      video.currentTime = 0;
+      fadingOutRef.current = false;
+      void video.play();
+      fadeTo(1);
+    };
+
+    const handleCanPlay = () => {
+      fadeTo(1);
+    };
+
+    const handleTimeUpdate = () => {
+      if (!video.duration || Number.isNaN(video.duration)) return;
+      if (video.duration - video.currentTime <= 0.55 && !fadingOutRef.current) {
+        fadingOutRef.current = true;
+        fadeTo(0);
+      }
+    };
+
+    const handleEnded = () => {
+      video.style.opacity = "0";
+      window.setTimeout(playFromStart, 100);
+    };
+
+    video.style.opacity = "0";
+    video.addEventListener("canplay", handleCanPlay);
+    video.addEventListener("timeupdate", handleTimeUpdate);
+    video.addEventListener("ended", handleEnded);
+
+    return () => {
+      cancelFade();
+      video.removeEventListener("canplay", handleCanPlay);
+      video.removeEventListener("timeupdate", handleTimeUpdate);
+      video.removeEventListener("ended", handleEnded);
+    };
+  }, []);
+
   return (
     <section id="top" className="hero-section" ref={ref}>
       <motion.div className="hero-visual-plane" style={{ y, scale }}>
-        <img src="/assets/generated/gate-open.svg" alt="" aria-hidden="true" />
+        <video
+          ref={videoRef}
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260328_115001_bcdaa3b4-03de-47e7-ad63-ae3e392c32d4.mp4"
+          autoPlay
+          muted
+          playsInline
+          preload="metadata"
+          aria-hidden="true"
+        />
       </motion.div>
       <div className="hero-content">
-        <Reveal>
+        <Reveal className="hero-copy-panel">
           <p className="hero-kicker">Java Backend · AI Application · Microservices</p>
-          <h1>于昊骏</h1>
+          <h1 style={{ fontFamily: "'Instrument Serif', serif" }}>于昊骏</h1>
+          <h2>Java 后端开发工程师</h2>
           <p className="hero-copy">
             熟悉 Spring Boot、Spring Cloud Alibaba、RabbitMQ、Kafka、Redis、Dubbo、XXL-JOB。参与企业级智能审核、合同全生命周期系统，也做过从开发到上线的 VibeCoding 项目。
           </p>
+          <div className="hero-contact-bar liquid-glass">
+            <Mail size={20} aria-hidden="true" />
+            <a href="mailto:879406927@qq.com">879406927@qq.com</a>
+            <a className="hero-submit" href="#work" aria-label="进入简历内容">
+              <LucideArrowRight size={20} aria-hidden="true" />
+            </a>
+          </div>
           <div className="hero-actions">
-            <MagneticButton href="mailto:879406927@qq.com">879406927@qq.com</MagneticButton>
-            <MagneticButton href="tel:13840526193" className="button-soft">
-              138-4052-6193
+            <MagneticButton href="tel:13840526193">
+              <Phone size={18} aria-hidden="true" /> 138-4052-6193
+            </MagneticButton>
+            <MagneticButton href={links.resume} className="button-soft">
+              <FileText size={18} aria-hidden="true" /> 查看简历
             </MagneticButton>
             <MagneticButton href={links.github} className="button-soft">
               <GithubLogo weight="bold" /> GitHub
             </MagneticButton>
             <MagneticButton href={links.note} className="button-soft">
-              <LinkSimple weight="bold" /> 语雀笔记
+              <LucideLink size={18} aria-hidden="true" /> 语雀笔记
             </MagneticButton>
           </div>
         </Reveal>
-        <Reveal className="portrait-stage" delay={0.15}>
-          <div className="portrait-orbit orbit-one" />
-          <div className="portrait-orbit orbit-two" />
-          <img src="/assets/resume/avatar.jpg" alt="于昊骏证件照" />
-          <div className="focus-panel">
-            <span>Current Focus</span>
-            <strong>企业后端 · AI 工程化</strong>
-            <small>南京正大天晴后端工程师</small>
-          </div>
-        </Reveal>
+      </div>
+      <div className="hero-socials" aria-label="常用链接">
+        <a className="liquid-glass" href={links.github} target="_blank" rel="noreferrer" aria-label="GitHub">
+          <GithubLogo weight="bold" aria-hidden="true" />
+        </a>
+        <a className="liquid-glass" href={links.note} target="_blank" rel="noreferrer" aria-label="语雀笔记">
+          <LucideLink size={20} aria-hidden="true" />
+        </a>
+        <a className="liquid-glass" href={links.resume} target="_blank" rel="noreferrer" aria-label="查看简历 PDF">
+          <FileText size={20} aria-hidden="true" />
+        </a>
       </div>
     </section>
   );

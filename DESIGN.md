@@ -2,7 +2,7 @@
 
 ## Visual Thesis
 
-冰蓝色玻璃宇宙入口：以纯背景、雾面玻璃、柔和光门和粒子景深承载“进入简历世界”的第一记忆点，蓝白透明层次表达 AI 与工程化，真实项目截图和分组详情承担证据感。
+暗色电影感 Liquid Glass 首页：以全屏远程视频、JS 淡入淡出循环、雾面玻璃按钮和低位海报式文字承载“进入简历世界”的第一记忆点，蓝白透明层次表达 AI 与工程化，真实项目截图和分组详情承担证据感。
 
 ## Palette
 
@@ -19,7 +19,7 @@
 
 ## Layout
 
-- 首屏全画布玻璃光门，不放传统 hero 卡片。
+- 入口为全画布玻璃光门，首页 Hero 使用全屏远程视频背景和中下方电影海报式文字，不展示头像。
 - 工作经历用纵向轨道，企业项目用宽幅系统面板，个人项目用流程线。
 - VibeCoding 采用上文案、下图片舞台的上下结构，并为每个作品提供独立导航。
 - 详情弹窗通过 Portal 脱离滚动容器，避免 fixed 被 transform 影响。
@@ -38,6 +38,7 @@
 - `public/assets/generated/fantasy-entry.svg`
 - `public/assets/generated/celestial-gate.png`
 - `public/assets/generated/detail-texture.svg`
+- 远程 Hero 视频：`https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260328_115001_bcdaa3b4-03de-47e7-ad63-ae3e392c32d4.mp4`
 - `public/assets/showcase/*`
 - `public/assets/resume/avatar.jpg`
 - `public/assets/resume/yuhaojun-resume.pdf`
