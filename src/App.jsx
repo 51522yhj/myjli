@@ -61,6 +61,7 @@ const enterpriseProjects = [
     stack: ["Spring Boot", "Dubbo", "Kafka", "MyBatis-Plus", "XXL-JOB", "MySQL"],
     summary:
       "企业级 AI 智能审核系统，面向报销、采购、合同、发票、设备验收等场景。系统自动采集 HBX、SRM、SAP、EAM、电子影像、合同签章、OCR、风控等数据，结合规则配置、提示词、附件 OCR 和 AI/DS 引擎生成规则级审核结果。",
+    keyFacts: ["多模块 Maven 工程", "规则级审核结果", "多系统数据采集", "支持重跑与回调"],
     points: [
       "参与任务创建、场景规则匹配、Handler 编排、AI 审核结果落库等核心链路。",
       "维护 AimodContext 上下文流转，处理发票、合同、收货单、SAP/EAM 参数等跨 Handler 数据传递。",
@@ -68,6 +69,52 @@ const enterpriseProjects = [
       "通过任务表、规则结果表、应用数据快照表定位数据来源与 AI 判断依据。",
     ],
     flow: ["创建审核任务", "匹配场景规则", "采集外部数据", "Handler 编排", "组装 AI/DS 请求", "规则结果落库", "人工复核/重跑/回调"],
+    detailSections: [
+      {
+        title: "业务定位",
+        items: [
+          "把费用、采购、合同、发票、验收等人工审核动作抽象为任务、规则、数据快照和 AI 判断结果。",
+          "解决审核数据分散、规则复杂、人工跨系统核对成本高、结果难沉淀的问题。",
+          "最终目标不是简单调用大模型，而是形成可追踪、可重跑、可人工复核的企业审核闭环。",
+        ],
+      },
+      {
+        title: "核心链路",
+        items: [
+          "外部系统或前端发起任务后，由任务服务创建或加载 aimod_task_info，并根据业务场景确定 appList 和规则列表。",
+          "系统构建 AimodContext，再按 AppTypeEnum 的 sort 顺序执行 Handler，逐步采集报销、采购、合同、发票、验收、风控和附件数据。",
+          "BaseHandler 将每个 Handler 的应用数据保存到 aimod_task_relation_app，OcrHandler 补充附件文本，DsHandler 统一组装 AI/DS 请求。",
+          "AI/DS 返回后按规则粒度写入 aimod_task_result，更新任务状态，必要时回调来源系统或进入人工复核。",
+        ],
+      },
+      {
+        title: "Handler 与上下文",
+        items: [
+          "HbxHandler 获取报销单、发票、收款、合同号、SRM 订单/收货单和流程实例；SrmHandler 补充采购、收货、品类、金额和 SAP/EAM 下游查询参数。",
+          "SapQmHandler、SapMmHandler、EamHandler、AcceptanceHandler 分别处理质检、收货凭证、EAM 验收和设备验收阶段。",
+          "AimodContext 保存 taskInfo、scene、reqMap、fileList、contractCodeList、receiveNoList、sapMmReqList、processIdMap、dsParam 等运行时数据。",
+          "Handler 之间通过 AimodContext 传递依赖，避免互相直接调用，同时保证数据采集顺序和跨系统参数复用。",
+        ],
+      },
+      {
+        title: "外部系统与数据",
+        items: [
+          "HBX 提供报销单、业务类型、金额、发票、收款明细和流程信息；SRM 提供采购订单、收货单、品类、金额、收货时间和项目编号。",
+          "SAP-QM 提供质检放行结果，SAP-MM 提供收货凭证和金额，EAM 提供设备/资产验收状态和验收阶段。",
+          "电子影像、YPP、合同签章、风控、用户中心和飞书分别补充附件、发票识别、合同文件、风险信息、组织人员和配置类数据。",
+          "DS/FastGPT/RAG 承担 AI 审核、OCR 文本理解和知识检索能力。",
+        ],
+      },
+      {
+        title: "核心表与排查",
+        items: [
+          "aimod_task_info 是任务主表，记录单据号、场景、任务状态、AI 汇总结果和人工结果。",
+          "aimod_task_result 是规则结果表，保存每条规则的 AI 结果、AI 批注、人工结果、规则内容、来源和等级。",
+          "aimod_task_relation_app 是应用数据快照表，每个 Handler 采集的数据按 app_type 保存 JSON，用于复盘 AI 判断依据。",
+          "排查 AI 判断与业务数据不一致时，先看任务状态和规则结果，再看应用快照、附件/OCR、提示词与外部系统返回，确认是数据源、规则、提示词还是模型判断问题。",
+        ],
+      },
+    ],
   },
   {
     id: "sign",
@@ -77,6 +124,7 @@ const enterpriseProjects = [
     stack: ["Spring Boot", "MyBatis-Plus", "MySQL", "Dubbo", "XXL-JOB", "TextIn"],
     summary:
       "公司内部合同全生命周期管理系统，覆盖合同拟定、模板配置、审批流转、电子签署、文件归档、合同检索、权限控制、用印管理及外部系统联动。",
+    keyFacts: ["合同全生命周期", "智能体创建专家协议", "流程中心联动", "文件/OCR/签署补偿"],
     points: [
       "参与合同拟定、提交、审批、签署、归档等核心链路开发与维护。",
       "参与专家协议智能创建能力，实现智能体入参与合同业务模型转换。",
@@ -84,6 +132,52 @@ const enterpriseProjects = [
       "参与合同文件生成、离线文件识别、定时任务补偿，提高合同创建和归档稳定性。",
     ],
     flow: ["拟定合同", "模板/文件处理", "保存签署方", "提交审批", "电子/线下签署", "文件归档", "检索与权限控制"],
+    detailSections: [
+      {
+        title: "业务定位",
+        items: [
+          "放心签是企业级合同全生命周期管理系统，目标是把线下合同流转变成线上结构化、流程化、可追踪、可审计的闭环。",
+          "系统覆盖合同拟定、模板配置、审批、签署、归档、用印、可见范围、合同检索和外部系统联动。",
+          "支持模板合同、非模板合同、主子合同、线下签、电子签以及智能体创建合同等复杂场景。",
+        ],
+      },
+      {
+        title: "核心模块",
+        items: [
+          "合同拟定模块包含基本信息、正文、签署方、签章位置、计划/项目关联和提交接口，核心路径为 /contract/preparation。",
+          "合同签署模块围绕 /contract/sign，处理签署提交、我方签章、短信验证码、签署校验和签署状态查询。",
+          "合同审批模块通过流程中心完成审批任务，管理与检索模块支持列表、详情、下载、可见范围、调整、删除、诊断和修复。",
+          "模板、文件、PDF、OCR、合合文档解析和印章提取支撑模板合同生成、离线文件识别、文件上传下载与预览。",
+        ],
+      },
+      {
+        title: "专家协议智能体创建",
+        items: [
+          "入口为 POST /contract/agent/se/create，入参包含 basicInfo、signer、suppliers、planInfo、riskInfo、teachTime、teachDuration 等复合结构。",
+          "流程不是只插入合同主表，而是将智能体结构化入参转换成内部合同 DTO，复用合同拟定与提交流程。",
+          "系统保存 contract_info、contract_content、contract_signer、contract_sign_position、contract_plan_rel、contract_ext、contract_file 等多表数据。",
+          "提交后生成主/子合同 PDF，调用流程中心创建审批流，写入 contract_relation_other_app，并返回合同编码。",
+        ],
+      },
+      {
+        title: "责任链与状态流转",
+        items: [
+          "合同生命周期大体是拟定/保存 -> 提交 -> 审批中 -> 待签署 -> 签署中 -> 已生效/归档，也存在驳回、撤回、作废和终止分支。",
+          "合同提交、签署等复杂流程使用 BusinessHandler、ContractContext、ContractProcessBuilder 等处理器链编排。",
+          "处理器分别负责参数校验、供应商/签署方校验、离线文件检查、PDF 生成、子合同创建、流程中心创建、状态更新和消息通知。",
+          "这种设计让不同合同类型、签署方式、模板/非模板分支可以动态组合，线上排查也能定位到具体处理器。",
+        ],
+      },
+      {
+        title: "核心表与联调排查",
+        items: [
+          "contract_info 是合同聚合根，contract_content 保存正文结构，contract_signer 保存签署主体，contract_sign_position 保存签章页码和坐标。",
+          "contract_file 关联 PDF 和文件中心 ID，contract_relation_other_app 保存流程中心实例、E签宝流程等外部关联，contract_visible_range 控制可见范围。",
+          "联调重点包括流程中心审批人、文件中心 fileId、E签宝 fileKey、用户/组织/供应商数据、计划系统 planId、合合文档解析和 OCR 结果。",
+          "日常排查会结合合同编码查主子合同、流程实例、文件记录、签署方、签章位置和定时任务补偿状态。",
+        ],
+      },
+    ],
   },
 ];
 
@@ -96,6 +190,7 @@ const personalProjects = [
     stack: ["Spring Cloud Alibaba", "Nacos", "Gateway", "OpenFeign", "RabbitMQ", "Redis", "MySQL"],
     summary:
       "类 LeetCode / 洛谷的在线编程评测系统，拆分网关、用户、题目、判题、代码沙箱和竞赛服务，通过 RabbitMQ 承接异步判题任务，并支持 AI 辅助生成题目。",
+    keyFacts: ["Spring Cloud 微服务", "RabbitMQ 异步判题", "代码沙箱", "AI 辅助出题"],
     points: [
       "题目服务保存提交记录并投递消息，判题服务消费后调用代码沙箱执行。",
       "支持 Java、C、C++、Python 执行分发，回写耗时、内存、输出和错误信息。",
@@ -103,6 +198,43 @@ const personalProjects = [
       "竞赛提交使用独立 exchange/queue，避免和普通题提交混在一起。",
     ],
     flow: ["提交代码", "保存 WAITING 记录", "投递 RabbitMQ", "判题服务消费", "沙箱执行", "策略比较", "写回 JudgeInfo"],
+    detailSections: [
+      {
+        title: "系统定位",
+        items: [
+          "YYOJ 是前后端分离的在线判题与编程竞赛平台，支持注册登录、题库管理、在线写题、代码提交、异步判题、竞赛、排行榜、评论点赞、文件上传和 AI 辅助出题。",
+          "后端拆分为网关、用户、题目、判题、代码沙箱、竞赛等服务，使用 Nacos 注册发现、Gateway 统一入口、OpenFeign 服务间调用。",
+          "前端基于 Vue3、TypeScript、Arco Design、Monaco Editor、ByteMD 和 ECharts。",
+        ],
+      },
+      {
+        title: "异步判题链路",
+        items: [
+          "用户提交代码后，题目服务先校验题目和语言，保存提交记录，状态为 WAITING，并向 RabbitMQ 投递 questionSubmitId。",
+          "判题服务消费消息，通过 Feign 查询提交记录、题目信息、判题用例和判题配置，然后把状态更新为 RUNNING。",
+          "判题服务组装 ExecuteCodeRequest，调用代码沙箱执行多组输入用例，拿到输出、耗时、内存和错误信息。",
+          "JudgeManager 按策略比较输出和限制，最终回写 SUCCEED 与 JudgeInfo，前端通过查询提交结果获取判题状态。",
+        ],
+      },
+      {
+        title: "RabbitMQ 与隔离",
+        items: [
+          "普通题提交使用 code_exchange、code_queue、my_routingKey；竞赛提交使用 code_exchange1、code_queue1、my_routingKey1。",
+          "使用 MQ 的原因是提交接口可以快速返回 ID，判题任务排队消费，后续可横向扩展多个判题服务实例。",
+          "竞赛提交和普通题提交拆队列，便于做优先级、隔离和统计，避免互相影响。",
+          "面试表达上可以强调先落库再投递消息，让任务具备可查询状态，失败时也更容易补偿或重试。",
+        ],
+      },
+      {
+        title: "判题与沙箱设计",
+        items: [
+          "判题服务使用 CodeSandboxFactory 根据配置创建沙箱，CodeSandboxProxy 做统一调用增强，JudgeStrategy 处理不同语言或题型的判断逻辑。",
+          "代码沙箱对外暴露 /executeCode，通过内部 auth 请求头做基础鉴权，并按语言选择 Java、C++、C、Python 执行器。",
+          "沙箱负责写入临时目录、编译、执行多组用例、收集输出和错误，判题服务负责业务状态和结果判断。",
+          "当前沙箱适合学习和演示，生产级还应进一步加强 Docker/Firecracker、网络隔离、文件系统隔离、CPU/内存限制和超时强杀。",
+        ],
+      },
+    ],
   },
   {
     id: "luhet",
@@ -112,6 +244,7 @@ const personalProjects = [
     stack: ["Spring Boot 3", "Spring AI Alibaba", "ReactAgent", "MemorySaver", "Tool Calling", "SSE"],
     summary:
       "将 Dify 录合同流程改造为 Spring AI Alibaba 应用，用 ReactAgent、MemorySaver 和 Tool Calling 把自然语言对话收束到确定的合同业务流程。",
+    keyFacts: ["17 个业务接口", "Tool Calling", "SSE 流式输出", "二次确认"],
     points: [
       "围绕 17 个接口组织合同创建、状态查询、规则校验、审批查看等 Tool。",
       "使用 SSE 输出模型思考、字段补全、风险检查和待确认项。",
@@ -119,6 +252,41 @@ const personalProjects = [
       "Tool 调用结果回填到合同草稿，避免 AI 内容停留在非确定文本层。",
     ],
     flow: ["输入合同意图", "解析上下文", "选择 Tool", "调用合同接口", "风险校验", "用户确认", "创建合同并发起审批"],
+    detailSections: [
+      {
+        title: "改造目标",
+        items: [
+          "把 Dify 中较难沉淀到 Java 工程里的录合同流程，改造成基于 Spring AI Alibaba 的后端智能体应用。",
+          "核心目标是保留大模型对话体验，同时让合同创建、查询、校验、审批等动作落到确定的业务接口和状态机里。",
+          "通过 MemorySaver 保存对话上下文，通过 ReactAgent 和 Tool Calling 控制工具调用顺序。",
+        ],
+      },
+      {
+        title: "17 个接口分类",
+        items: [
+          "合同创建类：合同基础信息、签署方、正文、关联计划、文件生成和提交审批。",
+          "查询类：合同状态、审批状态、模板信息、供应商/专家/计划信息查询。",
+          "校验类：字段完整性、业务规则、风险检查、合同创建前置条件校验。",
+          "辅助类：草稿保存、用户确认、错误原因返回和流程中断。",
+        ],
+      },
+      {
+        title: "流式与确认",
+        items: [
+          "SSE 用于把模型解析、字段补全、风险检查和待确认项分阶段推给前端，让用户看到流程进展。",
+          "AI 生成内容不会直接落库，而是先形成合同草稿和待确认字段，用户确认后才调用创建和提交类 Tool。",
+          "风险检查失败时中断后续 Tool 调用，返回明确失败原因，避免错误数据继续进入审批链路。",
+        ],
+      },
+      {
+        title: "确定性控制",
+        items: [
+          "Tool 入参采用结构化 DTO，模型只负责生成可校验字段，业务服务负责最终校验和执行。",
+          "每个 Tool 的返回结果回填到上下文，后续步骤基于真实接口响应而不是模型猜测继续推进。",
+          "如果智能体调用错接口，优先通过工具描述、参数校验、状态检查和异常中断来阻止错误流程落库。",
+        ],
+      },
+    ],
   },
 ];
 
@@ -232,7 +400,10 @@ const skills = [
 const allDetails = [...enterpriseProjects, ...personalProjects, ...vibeProjects];
 
 function useGateEntered() {
-  const [entered, setEntered] = useState(() => window.sessionStorage.getItem("myjli-entered") === "true");
+  const [entered, setEntered] = useState(() => {
+    const forceIntro = new URLSearchParams(window.location.search).has("intro");
+    return !forceIntro && window.sessionStorage.getItem("myjli-entered") === "true";
+  });
 
   const enter = () => {
     window.sessionStorage.setItem("myjli-entered", "true");
@@ -323,30 +494,31 @@ function GateIntro({ entered, onEnter }) {
   const start = () => {
     if (opening) return;
     setOpening(true);
-    window.setTimeout(onEnter, reduced ? 80 : 1250);
+    window.setTimeout(onEnter, reduced ? 80 : 1550);
   };
 
   return (
     <AnimatePresence>
       {!entered && (
         <motion.section className={`gate-intro ${opening ? "opening" : ""}`} exit={{ opacity: 0 }} transition={{ duration: 0.7 }}>
-          <img className="gate-open-image" src="/assets/generated/gate-open.svg" alt="" aria-hidden="true" />
-          <div className="gate-door-wrap" aria-hidden="true">
-            <div className="gate-door-half gate-door-left" />
-            <div className="gate-door-half gate-door-right" />
-          </div>
+          <img className="gate-world-image" src="/assets/generated/fantasy-entry.svg" alt="" aria-hidden="true" />
+          <div className="entry-mist entry-mist-one" aria-hidden="true" />
+          <div className="entry-mist entry-mist-two" aria-hidden="true" />
+          <div className="entry-stars" aria-hidden="true" />
+          <div className="entry-portal" aria-hidden="true" />
           <motion.div
-            className="gate-copy"
+            className="gate-copy fantasy-copy"
             initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.35 }}
+            animate={opening ? { opacity: 0, y: -34, scale: 0.96, filter: "blur(14px)" } : { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+            transition={{ duration: opening ? 0.65 : 0.5, ease: [0.22, 1, 0.36, 1] }}
           >
             <span>Yuhaojun Resume Portal</span>
-            <h1>打开梦幻科技之门</h1>
-            <p>进入一份以企业后端、AI 应用集成和工程化交付为主线的 Java 后端简历。</p>
-            <MagneticButton onClick={start}>
-              进入简历 <ArrowRight weight="bold" />
+            <h1>Y U H A O J U N</h1>
+            <p>企业后端 · AI 工程化 · VibeCoding</p>
+            <MagneticButton onClick={start} className="enter-world-button">
+              点击进入 <ArrowRight weight="bold" />
             </MagneticButton>
+            <small>Click to explore the resume world</small>
           </motion.div>
         </motion.section>
       )}
@@ -518,6 +690,11 @@ function EnterpriseProjects({ onDetail }) {
                 <span>{project.label}</span>
                 <h3>{project.title}</h3>
                 <p>{project.summary}</p>
+                <div className="fact-row">
+                  {(project.keyFacts || []).slice(0, 4).map((fact) => (
+                    <span key={fact}>{fact}</span>
+                  ))}
+                </div>
                 <div className="tag-row">
                   {project.stack.slice(0, 5).map((tag) => (
                     <span key={tag}>{tag}</span>
@@ -559,6 +736,11 @@ function PersonalProjects({ onDetail }) {
               <time>{project.period}</time>
               <h3>{project.title}</h3>
               <p>{project.summary}</p>
+              <div className="fact-row">
+                {(project.keyFacts || []).slice(0, 4).map((fact) => (
+                  <span key={fact}>{fact}</span>
+                ))}
+              </div>
               <div className="tag-row">
                 {project.stack.map((tag) => (
                   <span key={tag}>{tag}</span>
@@ -735,6 +917,13 @@ function DetailModal({ item, onClose }) {
           <span className="modal-label">Project Detail</span>
           <h3>{item.title}</h3>
           <p>{item.summary}</p>
+          {item.keyFacts && (
+            <div className="modal-facts">
+              {item.keyFacts.map((fact) => (
+                <span key={fact}>{fact}</span>
+              ))}
+            </div>
+          )}
           <div className="modal-grid">
             <section>
               <h4>主要亮点</h4>
@@ -763,6 +952,20 @@ function DetailModal({ item, onClose }) {
               )}
             </section>
           </div>
+          {item.detailSections && (
+            <div className="detail-sections">
+              {item.detailSections.map((section) => (
+                <section key={section.title}>
+                  <h4>{section.title}</h4>
+                  <ul>
+                    {section.items.map((point) => (
+                      <li key={point}>{point}</li>
+                    ))}
+                  </ul>
+                </section>
+              ))}
+            </div>
+          )}
           {item.flow && (
             <div className="modal-flow">
               {item.flow.map((step, index) => (

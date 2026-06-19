@@ -143,74 +143,125 @@ button {
   display: grid;
   place-items: center;
   overflow: hidden;
-  background: oklch(0.96 0.03 240);
+  background: #dceeff;
   perspective: 1600px;
 }
 
-.gate-open-image {
+.gate-intro::after {
+  content: "";
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transform: scale(1.04);
+  width: 24vmin;
+  height: 24vmin;
+  border-radius: 999px;
+  background: radial-gradient(circle, white 0 18%, oklch(0.88 0.12 220 / 0.85) 42%, transparent 70%);
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.35);
+  transition:
+    transform 1.35s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.9s ease;
+  z-index: 32;
 }
 
-.gate-door-wrap {
+.gate-world-image {
   position: absolute;
-  z-index: 2;
+  inset: -2%;
+  width: 104%;
+  height: 104%;
+  object-fit: cover;
+  transform: scale(1.02);
+  transition:
+    transform 1.5s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 1.2s ease,
+    opacity 1.2s ease;
+}
+
+.entry-mist,
+.entry-stars,
+.entry-portal {
+  position: absolute;
   inset: 0;
-  transform-style: preserve-3d;
-  filter: drop-shadow(0 42px 80px oklch(0.34 0.15 252 / 0.22));
   pointer-events: none;
 }
 
-.gate-door-half {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 50%;
-  background-image: url("/assets/generated/gate-closed.svg");
-  background-size: 200% 100%;
-  background-repeat: no-repeat;
-  transition:
-    transform 1.25s cubic-bezier(0.22, 1, 0.36, 1),
-    filter 1s ease,
-    opacity 1s ease;
-  backface-visibility: hidden;
+.entry-mist {
+  z-index: 3;
+  background:
+    radial-gradient(ellipse at 18% 76%, oklch(1 0 0 / 0.7), transparent 32%),
+    radial-gradient(ellipse at 80% 22%, oklch(0.98 0.02 230 / 0.54), transparent 30%),
+    linear-gradient(180deg, oklch(1 0 0 / 0.24), transparent 38%, oklch(1 0 0 / 0.32));
+  mix-blend-mode: screen;
+  animation: mistDrift 12s ease-in-out infinite alternate;
 }
 
-.gate-door-left {
-  left: 0;
-  background-position: left center;
-  transform-origin: left center;
+.entry-mist-two {
+  opacity: 0.64;
+  transform: translate3d(-3%, 2%, 0) scale(1.08);
+  animation-duration: 16s;
+  animation-direction: alternate-reverse;
 }
 
-.gate-door-right {
-  right: 0;
-  background-position: right center;
-  transform-origin: right center;
+.entry-stars {
+  z-index: 4;
+  opacity: 0.62;
+  background-image:
+    radial-gradient(circle, white 0 1.5px, transparent 2px),
+    radial-gradient(circle, oklch(0.82 0.14 220) 0 1px, transparent 1.8px);
+  background-position:
+    0 0,
+    36px 42px;
+  background-size:
+    108px 108px,
+    132px 132px;
+  animation: starFloat 24s linear infinite;
+  mask-image: radial-gradient(circle at 50% 50%, black 0 58%, transparent 82%);
 }
 
-.gate-intro.opening .gate-door-left {
-  transform: rotateY(-78deg) translateX(-2rem);
-  opacity: 0.78;
-  filter: blur(1px);
+.entry-portal {
+  z-index: 5;
+  background:
+    radial-gradient(circle at 50% 52%, oklch(1 0 0 / 0.76) 0 8%, oklch(0.9 0.13 218 / 0.38) 18%, transparent 36%),
+    conic-gradient(from 32deg at 50% 52%, transparent, oklch(0.82 0.15 220 / 0.24), transparent, oklch(0.92 0.09 95 / 0.2), transparent);
+  filter: blur(0.4px);
+  transform: translateZ(60px);
+  animation: portalBreath 4.6s ease-in-out infinite;
+  mix-blend-mode: screen;
 }
 
-.gate-intro.opening .gate-door-right {
-  transform: rotateY(78deg) translateX(2rem);
-  opacity: 0.78;
-  filter: blur(1px);
+.gate-intro.opening::after {
+  opacity: 1;
+  transform: scale(10);
+}
+
+.gate-intro.opening .gate-world-image {
+  opacity: 0.9;
+  filter: blur(8px) brightness(1.18) saturate(1.18);
+  transform: scale(1.18);
+}
+
+.gate-intro.opening .entry-portal {
+  animation-duration: 0.9s;
+  transform: scale(2.4) translateZ(120px);
+}
+
+.gate-intro.opening .fantasy-copy {
+  opacity: 0;
+  filter: blur(14px);
+  transform: translateY(-2rem) scale(0.96);
 }
 
 .gate-copy {
   position: relative;
   z-index: 20;
-  width: min(720px, calc(100vw - 2rem));
+  width: min(1120px, calc(100vw - 2rem));
   text-align: center;
   color: var(--ink);
-  transform: translateY(1rem);
+  transform: translateY(16vh);
+  text-shadow: 0 12px 36px oklch(0.18 0.08 252 / 0.22);
+  transition:
+    transform 0.8s ease,
+    opacity 0.8s ease,
+    filter 0.8s ease;
 }
 
 .gate-copy span,
@@ -236,17 +287,51 @@ button {
 }
 
 .gate-copy h1 {
-  margin-top: 0.6rem;
-  font-size: clamp(3.1rem, 8vw, 6rem);
-  line-height: 0.95;
+  margin-top: 0.75rem;
+  color: oklch(0.2 0.08 255);
+  font-size: clamp(2.55rem, 7.4vw, 6.35rem);
+  line-height: 0.92;
+  letter-spacing: 0.09em;
+  text-shadow:
+    0 1px 0 oklch(1 0 0 / 0.88),
+    0 24px 60px oklch(0.34 0.16 252 / 0.26);
+  white-space: nowrap;
 }
 
 .gate-copy p {
-  margin: 1.1rem auto 1.6rem;
+  margin: 1.1rem auto 1.45rem;
   max-width: 54ch;
-  color: var(--muted);
-  font-size: 1.05rem;
-  line-height: 1.8;
+  color: oklch(0.35 0.08 252);
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  font-weight: 850;
+  line-height: 1.7;
+}
+
+.fantasy-copy > span {
+  color: oklch(0.98 0.06 93);
+  text-shadow: 0 0 22px oklch(0.86 0.13 90 / 0.65);
+}
+
+.fantasy-copy small {
+  display: block;
+  margin-top: 0.9rem;
+  color: oklch(0.42 0.07 248 / 0.78);
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.enter-world-button {
+  min-width: min(280px, 86vw);
+  justify-content: center;
+  border: 1px solid oklch(0.98 0.04 92 / 0.86);
+  background:
+    linear-gradient(135deg, oklch(0.98 0.06 92 / 0.95), oklch(0.72 0.15 224 / 0.94)),
+    linear-gradient(90deg, transparent, white, transparent);
+  color: oklch(0.2 0.07 255);
+  box-shadow:
+    0 0 0 7px oklch(1 0 0 / 0.12),
+    0 24px 60px oklch(0.18 0.12 252 / 0.28);
 }
 
 .magnetic-button {
@@ -540,6 +625,28 @@ button {
   font-weight: 850;
 }
 
+.fact-row,
+.modal-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 1rem;
+}
+
+.fact-row span,
+.modal-facts span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  border: 1px solid oklch(0.75 0.08 240 / 0.42);
+  border-radius: 999px;
+  background: linear-gradient(135deg, oklch(1 0 0 / 0.82), oklch(0.88 0.06 240 / 0.55));
+  padding: 0.38rem 0.76rem;
+  color: oklch(0.28 0.08 252);
+  font-size: 0.84rem;
+  font-weight: 900;
+}
+
 .enterprise-track,
 .project-stack {
   display: grid;
@@ -820,23 +927,50 @@ button {
 }
 
 .modal-grid section,
-.modal-flow {
+.modal-flow,
+.detail-sections section {
   border: 1px solid oklch(0.82 0.05 246 / 0.62);
   border-radius: 14px;
   background: oklch(1 0 0 / 0.58);
   padding: 1rem;
 }
 
-.modal-grid h4 {
+.modal-grid h4,
+.detail-sections h4 {
   margin: 0;
   color: var(--ink);
 }
 
-.modal-grid ul {
+.modal-grid ul,
+.detail-sections ul {
   margin: 0.8rem 0 0;
   padding-left: 1.2rem;
   color: var(--muted);
   line-height: 1.8;
+}
+
+.modal-facts {
+  margin-top: 1.1rem;
+}
+
+.detail-sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.detail-sections section {
+  position: relative;
+  overflow: hidden;
+}
+
+.detail-sections section::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), oklch(0.88 0.12 92), transparent);
 }
 
 .repo-link {
@@ -893,6 +1027,37 @@ button {
 @keyframes orbit {
   to {
     rotate: 360deg;
+  }
+}
+
+@keyframes mistDrift {
+  from {
+    transform: translate3d(-2%, 1%, 0) scale(1.04);
+  }
+
+  to {
+    transform: translate3d(2%, -1%, 0) scale(1.1);
+  }
+}
+
+@keyframes starFloat {
+  to {
+    background-position:
+      108px 108px,
+      168px 174px;
+  }
+}
+
+@keyframes portalBreath {
+  0%,
+  100% {
+    opacity: 0.68;
+    transform: scale(0.98) translateZ(60px);
+  }
+
+  50% {
+    opacity: 0.95;
+    transform: scale(1.06) translateZ(90px);
   }
 }
 
