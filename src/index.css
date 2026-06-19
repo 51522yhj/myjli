@@ -519,17 +519,16 @@ button {
   z-index: 24;
   width: min(880px, calc(100vw - 2rem));
   margin: 0 auto;
-  border: 1px solid oklch(1 0 0 / 0.45);
-  border-radius: 28px;
-  background:
-    linear-gradient(135deg, oklch(1 0 0 / 0.38), oklch(0.94 0.04 88 / 0.18)),
-    radial-gradient(circle at 50% 0%, oklch(0.82 0.12 78 / 0.24), transparent 18rem);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
   padding: clamp(1.5rem, 4vw, 2.4rem);
   text-align: center;
   color: white;
-  box-shadow: 0 30px 110px oklch(0.25 0.08 252 / 0.12), inset 0 1px 0 oklch(1 0 0 / 0.56);
-  text-shadow: 0 12px 48px oklch(0.08 0.06 252 / 0.2);
-  backdrop-filter: blur(30px) saturate(160%);
+  box-shadow: none;
+  text-shadow: 0 12px 48px oklch(1 0 0 / 0.48), 0 2px 18px oklch(0.18 0.08 252 / 0.2);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   transition:
     transform 0.8s ease,
     opacity 0.8s ease,
