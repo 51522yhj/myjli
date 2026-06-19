@@ -33,11 +33,11 @@ const cinematicVideoUrl =
   "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_171521_25968ba2-b594-4b32-aab7-f6b69398a6fa.mp4";
 
 const navItems = [
-  ["经历", "#work"],
-  ["企业项目", "#enterprise"],
-  ["个人项目", "#projects"],
+  ["\u7ecf\u5386", "#work"],
+  ["\u4f01\u4e1a\u9879\u76ee", "#enterprise"],
+  ["\u4e2a\u4eba\u9879\u76ee", "#projects"],
   ["VibeCoding", "#vibecoding"],
-  ["技能", "#skills"],
+  ["\u6280\u80fd", "#skills"],
 ];
 
 const workExperience = [
@@ -489,17 +489,17 @@ const vibeProjects = [
     summary:
       "已上线的小程序及后台管理项目，包含 Spring Boot 后端、Vue 管理端和原生微信小程序，支持商品展示、分类、详情、后台维护和云托管部署。",
     images: [
-      "/assets/showcase/screen-09.png",
-      "/assets/showcase/screen-10.jpg",
-      "/assets/showcase/screen-11.jpg",
-      "/assets/showcase/screen-06.jpg",
-      "/assets/showcase/screen-07.jpg",
-      "/assets/showcase/screen-08.jpg",
-      "/assets/showcase/screen-01.png",
-      "/assets/showcase/screen-02.png",
-      "/assets/showcase/screen-03.png",
-      "/assets/showcase/screen-04.png",
-      "/assets/showcase/screen-05.png",
+      "/assets/showcase/screen-09.webp",
+      "/assets/showcase/screen-10.webp",
+      "/assets/showcase/screen-11.webp",
+      "/assets/showcase/screen-06.webp",
+      "/assets/showcase/screen-07.webp",
+      "/assets/showcase/screen-08.webp",
+      "/assets/showcase/screen-01.webp",
+      "/assets/showcase/screen-02.webp",
+      "/assets/showcase/screen-03.webp",
+      "/assets/showcase/screen-04.webp",
+      "/assets/showcase/screen-05.webp",
     ],
     points: ["三端工程结构清晰", "后台管理与小程序联动", "微信云托管部署", "线上后台地址可访问"],
   },
@@ -512,15 +512,15 @@ const vibeProjects = [
     summary:
       "Electron + React + TypeScript 桌面助手，聚焦会议、答题和知识辅助场景。语音转写和大模型接口可配置，结合知识库、屏幕上下文和个人提示词生成实时建议。",
     images: [
-      "/assets/showcase/screenshot-05.png",
-      "/assets/showcase/screenshot-06.png",
-      "/assets/showcase/screenshot-01.png",
-      "/assets/showcase/screenshot-02.png",
-      "/assets/showcase/screenshot-03.png",
-      "/assets/showcase/screenshot-04.png",
-      "/assets/showcase/screenshot-07.png",
-      "/assets/showcase/screenshot-08.png",
-      "/assets/showcase/screenshot-09.png",
+      "/assets/showcase/screenshot-05.webp",
+      "/assets/showcase/screenshot-06.webp",
+      "/assets/showcase/screenshot-01.webp",
+      "/assets/showcase/screenshot-02.webp",
+      "/assets/showcase/screenshot-03.webp",
+      "/assets/showcase/screenshot-04.webp",
+      "/assets/showcase/screenshot-07.webp",
+      "/assets/showcase/screenshot-08.webp",
+      "/assets/showcase/screenshot-09.webp",
     ],
     points: ["悬浮建议条", "会议记录", "知识库导入", "模型与语音服务可配置"],
   },
@@ -532,7 +532,7 @@ const vibeProjects = [
     stack: ["Kotlin", "Jetpack Compose", "Material 3", "本地存储", "Excel 导入导出"],
     summary:
       "用于本地体重记录和趋势观察的 Android 应用，支持目标体重、7 日均线、日历记录、备注标签、提醒和 Excel 备份。",
-    images: ["/assets/showcase/app-overview.png", "/assets/showcase/app-excel.png"],
+    images: ["/assets/showcase/app-overview.webp", "/assets/showcase/app-excel.webp"],
     points: ["本地隐私优先", "趋势和目标展示", "Excel 备份恢复"],
   },
   {
@@ -544,9 +544,9 @@ const vibeProjects = [
     summary:
       "半透明桌面悬浮工作记录应用，支持快捷新增、状态优先级、附件、搜索筛选、透明度调节、本地 JSON 兜底和 Supabase 云端同步。",
     images: [
-      "/assets/showcase/work-record-detail.png",
-      "/assets/showcase/work-record-overview.jpg",
-      "/assets/showcase/work-record-collapsed.jpg",
+      "/assets/showcase/work-record-detail.webp",
+      "/assets/showcase/work-record-overview.webp",
+      "/assets/showcase/work-record-collapsed.webp",
     ],
     points: ["记录详情与附件", "悬浮窗口", "云端同步", "快捷键呼出"],
   },
@@ -559,9 +559,9 @@ const vibeProjects = [
     summary:
       "横向拖拽式历史时间轴，支持通史与党史事件浏览、事件详情和图片展示，强调信息结构与沉浸式浏览。",
     images: [
-      "/assets/showcase/showcase-history-river-yuan.png",
-      "/assets/showcase/showcase-history-river-paper.png",
-      "/assets/showcase/showcase-cpc-river.png",
+      "/assets/showcase/showcase-history-river-yuan.webp",
+      "/assets/showcase/showcase-history-river-paper.webp",
+      "/assets/showcase/showcase-cpc-river.webp",
     ],
     points: ["横向历史长河", "事件详情", "党史与通史双线", "图片资源本地化"],
   },
@@ -767,7 +767,14 @@ function GateIntro({ entered, onEnter }) {
     <AnimatePresence>
       {!entered && (
         <motion.section className={`gate-intro ${opening ? "opening" : ""}`} exit={{ opacity: 0 }} transition={{ duration: 0.42 }}>
-          <img className="gate-world-image" src="/assets/generated/celestial-gate-warm.png" alt="" aria-hidden="true" />
+          <img
+            className="gate-world-image"
+            src="/assets/generated/celestial-gate-warm.webp"
+            alt=""
+            aria-hidden="true"
+            decoding="async"
+            fetchPriority="high"
+          />
           <div className="gate-cinematic-shade" aria-hidden="true" />
           <div className="real-gate-stage" aria-hidden="true">
             <div className="real-door real-door-left" />
@@ -1201,6 +1208,7 @@ function ImageCarousel({ project }) {
           src={images[index]}
           alt={`${project.title} 示例图 ${index + 1}`}
           loading="lazy"
+          decoding="async"
           initial={{ opacity: 0, scale: 0.96, y: 18 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 1.02, y: -18 }}
