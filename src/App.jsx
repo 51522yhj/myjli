@@ -288,14 +288,19 @@ const personalProjects = [
     ],
     flow: ["提交代码", "保存 WAITING 记录", "投递 RabbitMQ", "判题服务消费", "沙箱执行", "策略比较", "写回 JudgeInfo"],
     sequence: {
-      lanes: ["用户/前端", "题目服务", "RabbitMQ", "判题服务", "代码沙箱", "MySQL"],
+      lanes: ["用户", "题目服务", "RabbitMQ", "判题服务", "代码沙箱", "MySQL"],
       messages: [
-        ["用户/前端", "题目服务", "提交代码"],
-        ["题目服务", "MySQL", "保存 WAITING"],
+        ["用户", "题目服务", "提交代码"],
+        ["题目服务", "MySQL", "保存提交记录，状态 WAITING"],
         ["题目服务", "RabbitMQ", "发送提交 ID"],
-        ["RabbitMQ", "判题服务", "消费消息"],
-        ["判题服务", "代码沙箱", "执行代码"],
-        ["判题服务", "MySQL", "回写 JudgeInfo"],
+        ["RabbitMQ", "判题服务", "消费判题消息"],
+        ["判题服务", "题目服务", "查询提交记录和题目信息"],
+        ["判题服务", "MySQL", "更新状态 RUNNING"],
+        ["判题服务", "代码沙箱", "执行代码，传入语言、代码、输入用例"],
+        ["代码沙箱", "判题服务", "返回输出、耗时、内存、错误信息", "return"],
+        ["判题服务", "判题服务", "判题策略比较输出和限制", "self"],
+        ["判题服务", "MySQL", "写回状态 SUCCEED 和 JudgeInfo"],
+        ["用户", "题目服务", "查询提交结果"],
       ],
     },
     detailSections: [
@@ -531,17 +536,15 @@ const skills = [
   "Spring Boot",
   "Spring Cloud Alibaba",
   "MyBatis-Plus",
-  "RabbitMQ",
   "Kafka",
   "Redis",
   "Dubbo",
   "XXL-JOB",
   "Spring AI",
-  "Zookeeper",
   "Nacos",
   "Vibe Coding",
-  "Codex",
-  "OpenCode",
+  "Zookeeper",
+  "RabbitMQ",
 ];
 
 const allDetails = [...enterpriseProjects, ...personalProjects, ...vibeProjects];
@@ -889,37 +892,65 @@ function SequenceDiagram({ project }) {
     return <FlowLine steps={project.flow} />;
   }
 
+  const width = 1000;
+  const top = 58;
+  const rowGap = 42;
+  const height = Math.max(390, top + messages.length * rowGap + 54);
+  const laneX = (lane) => {
+    const index = Math.max(0, lanes.indexOf(lane));
+    return ((index + 0.5) / lanes.length) * width;
+  };
+
   return (
     <div className="sequence-diagram" aria-label={`${project.title} 时序图`}>
-      <div className="sequence-lanes" style={{ "--lane-count": lanes.length }}>
-        {lanes.map((lane) => (
-          <div className="sequence-lane" key={lane}>
-            <span>{lane}</span>
-          </div>
-        ))}
-      </div>
-      <div className="sequence-messages">
-        {messages.map(([from, to, label], index) => {
-          const fromIndex = Math.max(0, lanes.indexOf(from));
-          const toIndex = Math.max(0, lanes.indexOf(to));
-          const start = Math.min(fromIndex, toIndex);
-          const end = Math.max(fromIndex, toIndex);
-          const reverse = fromIndex > toIndex;
+      <svg className="sequence-svg" viewBox={`0 0 ${width} ${height}`} role="img">
+        <defs>
+          <marker id={`arrow-${project.id}`} markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+            <path d="M 0 0 L 10 5 L 0 10 z" />
+          </marker>
+        </defs>
+        {lanes.map((lane) => {
+          const x = laneX(lane);
           return (
-            <div
-              className={`sequence-message ${reverse ? "reverse" : ""}`}
-              key={`${label}-${index}`}
-              style={{
-                "--row": index + 1,
-                "--start": start + 1,
-                "--span": end - start + 1,
-              }}
-            >
-              <span>{label}</span>
-            </div>
+            <g className="sequence-lane-svg" key={lane}>
+              <rect x={x - 58} y="8" width="116" height="30" rx="15" />
+              <text x={x} y="28" textAnchor="middle">
+                {lane}
+              </text>
+              <line x1={x} x2={x} y1="44" y2={height - 24} />
+            </g>
           );
         })}
-      </div>
+        {messages.map((message, index) => {
+          const [from, to, label, type] = message;
+          const x1 = laneX(from);
+          const x2 = laneX(to);
+          const y = top + index * rowGap;
+          const isSelf = type === "self" || from === to;
+          const isReturn = type === "return";
+
+          if (isSelf) {
+            const loop = 72;
+            return (
+              <g className="sequence-message-svg self" key={`${label}-${index}`}>
+                <path d={`M ${x1} ${y} C ${x1 + loop} ${y}, ${x1 + loop} ${y + 24}, ${x1} ${y + 24}`} markerEnd={`url(#arrow-${project.id})`} />
+                <text x={Math.min(width - 110, x1 + loop * 0.58)} y={y - 8} textAnchor="middle">
+                  {label}
+                </text>
+              </g>
+            );
+          }
+
+          return (
+            <g className={`sequence-message-svg ${isReturn ? "return" : ""}`} key={`${label}-${index}`}>
+              <line x1={x1} x2={x2} y1={y} y2={y} markerEnd={`url(#arrow-${project.id})`} />
+              <text x={(x1 + x2) / 2} y={y - 8} textAnchor="middle">
+                {label}
+              </text>
+            </g>
+          );
+        })}
+      </svg>
     </div>
   );
 }
@@ -1090,7 +1121,7 @@ function Skills() {
         ))}
       </Reveal>
       <Reveal className="skill-proof">
-        <p>熟练使用 Vibe Coding，有 Codex、OpenCode 等工具实践经验。具备实际线上网站、小程序上线经验。</p>
+        <p>熟练使用 Vibe Coding，有实际线上网站、小程序上线经验，并掌握 Zookeeper、RabbitMQ 等中间件。</p>
       </Reveal>
     </section>
   );

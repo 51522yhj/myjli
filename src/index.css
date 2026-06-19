@@ -444,32 +444,26 @@ button {
   position: relative;
   min-width: auto;
   justify-content: center;
-  border: 1px solid oklch(1 0 0 / 0.42);
-  background: oklch(1 0 0 / 0.08);
-  color: oklch(0.98 0.02 235);
+  border: 0;
+  background: transparent;
+  color: oklch(0.98 0.06 93);
   text-decoration: none;
-  backdrop-filter: blur(10px);
-  box-shadow:
-    inset 0 0 0 1px oklch(1 0 0 / 0.1),
-    0 0 34px oklch(0.7 0.2 235 / 0.28);
+  backdrop-filter: none;
+  box-shadow: none;
+  text-shadow: 0 0 22px oklch(0.86 0.13 90 / 0.52);
 }
 
 .magnetic-button.enter-world-button::after {
-  content: "";
-  position: absolute;
-  right: 1.1rem;
-  bottom: 0.55rem;
-  left: 1.1rem;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, currentColor, transparent);
-  opacity: 0.58;
+  content: none;
 }
 
 .magnetic-button.enter-world-button:hover {
-  background: oklch(1 0 0 / 0.15);
-  box-shadow:
-    inset 0 0 0 1px oklch(1 0 0 / 0.2),
-    0 0 46px oklch(0.72 0.2 235 / 0.42);
+  background: transparent;
+  box-shadow: none;
+  color: oklch(1 0.075 93);
+  text-shadow:
+    0 0 18px oklch(0.98 0.08 92 / 0.8),
+    0 0 40px oklch(0.82 0.13 90 / 0.5);
 }
 
 .magnetic-button {
@@ -893,101 +887,72 @@ button {
 
 .sequence-diagram {
   position: relative;
-  min-height: 360px;
-  overflow: hidden;
-  border: 1px solid oklch(0.8 0.07 240 / 0.54);
+  min-height: 420px;
+  overflow: auto;
+  border: 1px solid oklch(0.82 0.055 245 / 0.7);
   border-radius: 18px;
   background:
-    radial-gradient(circle at 50% 0%, oklch(0.78 0.13 230 / 0.22), transparent 16rem),
-    linear-gradient(135deg, oklch(1 0 0 / 0.76), oklch(0.93 0.035 245 / 0.72));
-  padding: 1rem;
+    linear-gradient(90deg, oklch(0.76 0.12 238 / 0.12) 1px, transparent 1px),
+    linear-gradient(180deg, oklch(0.76 0.12 238 / 0.1) 1px, transparent 1px),
+    radial-gradient(circle at 50% 0%, oklch(0.78 0.13 230 / 0.22), transparent 18rem),
+    linear-gradient(135deg, oklch(1 0 0 / 0.9), oklch(0.94 0.032 245 / 0.84));
+  background-size: 42px 42px, 42px 42px, auto, auto;
+  padding: 0.6rem;
 }
 
-.sequence-lanes,
-.sequence-messages {
-  position: absolute;
-  inset: 1rem;
-  display: grid;
-  grid-template-columns: repeat(var(--lane-count), minmax(72px, 1fr));
+.sequence-svg {
+  display: block;
+  min-width: 820px;
+  width: 100%;
+  height: auto;
 }
 
-.sequence-lane {
-  position: relative;
-  display: flex;
-  justify-content: center;
+.sequence-svg marker path {
+  fill: var(--primary);
 }
 
-.sequence-lane::after {
-  content: "";
-  position: absolute;
-  top: 2.7rem;
-  bottom: 0;
-  width: 1px;
-  background: linear-gradient(180deg, var(--primary), oklch(0.82 0.12 230 / 0.12));
+.sequence-lane-svg rect {
+  fill: oklch(1 0 0 / 0.86);
+  stroke: oklch(0.78 0.08 240 / 0.58);
+  stroke-width: 1.5;
+  filter: drop-shadow(0 7px 14px oklch(0.34 0.15 252 / 0.08));
 }
 
-.sequence-lane span {
-  position: relative;
-  z-index: 1;
-  display: inline-flex;
-  min-height: 34px;
-  align-items: center;
-  border: 1px solid oklch(0.78 0.08 240 / 0.42);
-  border-radius: 999px;
-  background: oklch(1 0 0 / 0.8);
-  padding: 0.25rem 0.55rem;
-  color: var(--primary-deep);
-  font-size: 0.78rem;
+.sequence-lane-svg text {
+  fill: var(--primary-deep);
+  font-size: 18px;
   font-weight: 900;
-  text-align: center;
 }
 
-.sequence-messages {
-  grid-template-rows: repeat(6, 1fr);
-  padding-top: 3.2rem;
-  pointer-events: none;
+.sequence-lane-svg line {
+  stroke: oklch(0.63 0.12 245 / 0.26);
+  stroke-dasharray: 8 10;
+  stroke-width: 2;
 }
 
-.sequence-message {
-  position: relative;
-  grid-column: var(--start) / span var(--span);
-  grid-row: var(--row);
-  align-self: center;
-  height: 28px;
-  margin: 0 0.45rem;
-  border-top: 2px solid var(--primary);
+.sequence-message-svg line,
+.sequence-message-svg path {
+  fill: none;
+  stroke: var(--primary);
+  stroke-linecap: round;
+  stroke-width: 3;
 }
 
-.sequence-message::after {
-  content: "";
-  position: absolute;
-  top: -5px;
-  right: -4px;
-  width: 12px;
-  height: 12px;
-  background: var(--primary);
-  clip-path: polygon(0 0, 100% 50%, 0 100%);
+.sequence-message-svg.return line {
+  stroke-dasharray: 9 8;
 }
 
-.sequence-message.reverse::after {
-  right: auto;
-  left: -4px;
-  transform: rotate(180deg);
-}
-
-.sequence-message span {
-  position: absolute;
-  top: -1.45rem;
-  left: 50%;
-  transform: translateX(-50%);
-  border-radius: 999px;
-  background: oklch(1 0 0 / 0.88);
-  padding: 0.2rem 0.55rem;
-  color: var(--ink);
-  font-size: 0.78rem;
+.sequence-message-svg text {
+  paint-order: stroke;
+  stroke: oklch(1 0 0 / 0.92);
+  stroke-width: 7;
+  fill: var(--ink);
+  font-size: 17px;
   font-weight: 850;
-  white-space: nowrap;
-  box-shadow: 0 8px 18px oklch(0.34 0.15 252 / 0.08);
+}
+
+.sequence-message-svg.self text {
+  text-anchor: middle;
 }
 
 .vibe-shell {
@@ -1384,9 +1349,8 @@ button {
     overflow-x: auto;
   }
 
-  .sequence-lanes,
-  .sequence-messages {
-    min-width: 720px;
+  .sequence-svg {
+    min-width: 760px;
   }
 
   .portrait-stage {
