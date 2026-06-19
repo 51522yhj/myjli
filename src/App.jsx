@@ -4,6 +4,8 @@ import {
   ArrowRight,
   Briefcase,
   Brain,
+  CaretLeft,
+  CaretRight,
   GithubLogo,
   GlobeHemisphereWest,
   LinkSimple,
@@ -34,21 +36,36 @@ const workExperience = [
     company: "南京正大天晴",
     role: "后端工程师",
     text: "参与智审 aimod、放心签 signAtEase 等企业系统建设，围绕企业级 AI 审核、合同全生命周期、外部系统集成和生产问题排查做后端交付。",
-    tags: ["Spring Boot", "Dubbo", "MySQL", "AI 审核"],
+    details: [
+      "在智审项目中参与任务创建、外部系统数据采集、Handler 编排、AI/DS 审核请求组装和规则结果落库。",
+      "在放心签项目中参与合同拟定、提交审批、签署归档、专家协议智能创建、文件生成和定时任务补偿等链路。",
+      "日常结合数据库表、应用数据快照、接口日志和外部系统返回定位联调与生产问题，沉淀常用排查 SQL 和测试方法。",
+    ],
+    tags: ["Spring Boot", "Dubbo", "MySQL", "AI 审核", "合同系统"],
   },
   {
     time: "2024.09 - 2025.02",
     company: "沈阳麟龙科技股份有限公司",
     role: "Java 研发实习生",
     text: "接触股票相关软件开发，参与内部业务接口、Redis、ES、RabbitMQ、XXL-JOB、gRPC 调用和员工账号开户相关开发。",
-    tags: ["RabbitMQ", "Redis", "XXL-JOB", "gRPC"],
+    details: [
+      "围绕股票相关业务系统做后端接口开发与联调，熟悉内部服务之间的调用方式和数据流转。",
+      "参与 Redis、ES、RabbitMQ、XXL-JOB、gRPC 等组件在业务链路中的使用和问题排查。",
+      "参与员工账号开户相关功能开发，处理参数校验、接口调用、状态流转和异常返回。",
+    ],
+    tags: ["RabbitMQ", "Redis", "XXL-JOB", "gRPC", "股票软件"],
   },
   {
     time: "2024.07 - 2024.09",
     company: "武汉杰思敏科技有限公司",
     role: "后端开发实习生",
     text: "参与对接国企的项目开发，主要负责接口开发、数据处理、业务联调与交付配合。",
-    tags: ["接口开发", "数据处理", "国企项目"],
+    details: [
+      "按国企项目需求完成后端接口开发，配合前端与现场联调，保证字段、状态和业务口径一致。",
+      "参与业务数据处理和接口返回结构整理，对接不同系统时关注参数映射、异常兜底和交付文档。",
+      "在项目周期内配合测试反馈修复问题，熟悉从需求理解、接口实现到联调交付的完整节奏。",
+    ],
+    tags: ["接口开发", "数据处理", "国企项目", "业务联调"],
   },
 ];
 
@@ -60,7 +77,7 @@ const enterpriseProjects = [
     icon: Brain,
     stack: ["Spring Boot", "Dubbo", "Kafka", "MyBatis-Plus", "XXL-JOB", "MySQL"],
     summary:
-      "企业级 AI 智能审核系统，面向报销、采购、合同、发票、设备验收等场景。系统自动采集 HBX、SRM、SAP、EAM、电子影像、合同签章、OCR、风控等数据，结合规则配置、提示词、附件 OCR 和 AI/DS 引擎生成规则级审核结果。",
+      "企业级 AI 智能审核系统，面向报销、采购、合同、发票、设备验收等业务场景。系统通过多模块后端服务自动采集 HBX、SRM、SAP、EAM、电子影像、合同签章、发票识别、风控等数据，并把结构化业务数据、附件 OCR、规则和提示词整合后提交 AI/DS 引擎，生成规则级审核结果。",
     keyFacts: ["多模块 Maven 工程", "规则级审核结果", "多系统数据采集", "支持重跑与回调"],
     points: [
       "参与任务创建、场景规则匹配、Handler 编排、AI 审核结果落库等核心链路。",
@@ -114,6 +131,42 @@ const enterpriseProjects = [
           "排查 AI 判断与业务数据不一致时，先看任务状态和规则结果，再看应用快照、附件/OCR、提示词与外部系统返回，确认是数据源、规则、提示词还是模型判断问题。",
         ],
       },
+      {
+        title: "Controller 与接口能力",
+        items: [
+          "TaskController 覆盖任务创建、列表、详情、校验、重跑、合同列表、文件 URL、规则结果、同步结果和导出任务。",
+          "TaskFlowController 支持流程化构建任务数据，包括规则、提示词、文件、应用数据、结果保存、汇总和加入任务队列。",
+          "ManageController 面向运维管理，提供错误任务列表、重跑、DS 执行、紧急执行、运行配置和结果查询。",
+          "FeishuTestController 用于飞书表格配置测试，支撑部分配置类数据读取。",
+        ],
+      },
+      {
+        title: "采购需求与设备验收",
+        items: [
+          "采购需求场景会综合报销单、发票、SRM 订单/收货、合同文件、SAP-QM、SAP-MM、EAM、电子影像和风控信息。",
+          "典型规则包括发票号、金额税额、税率、合同甲乙方、发票购销方、收货数量、质保期限、SAP-QM 放行、设备验收和供应商风险。",
+          "设备验收链路中，HbxHandler 提取 SRM 收货单号，SrmHandler 补充品类、收货时间、SAP 同步标识和 EAM/SAP 查询参数。",
+          "EamHandler 读取 ZYSSK 并映射为 EAM 验收结果；AcceptanceHandler 通过收货单号换设备编号，再查询验收阶段和流程状态。",
+        ],
+      },
+      {
+        title: "AI/DS 与附件处理",
+        items: [
+          "DsHandler 从 AimodContext.reqMap 读取结构化业务数据，合并规则列表、提示词、附件和 OCR 结果，形成 AI/DS 请求。",
+          "AI 返回以 rule_id、rule_name、ai_result、ai_remark、rule_content 等规则维度结构保存，便于复核和追溯。",
+          "文件来源包括 FSSC 电子影像、合同系统文件、发票扫描件、验收单、质保验收单、工程报审单和用户上传文件。",
+          "aimod_task_file_info 保存文件元数据，文件可进入 OCR，也可通过 fileId 和 source 查询预览或下载 URL。",
+        ],
+      },
+      {
+        title: "队列、重跑与配置化",
+        items: [
+          "任务创建后可进入队列，支持按权重或速率调度、DS 异步执行、失败任务重跑、紧急任务执行和长时间未返回任务处理。",
+          "CommonTaskQueueServiceImpl、ExecuteTaskManageImpl、RunAimodTaskExecuteImpl 等类支撑任务队列和执行管理。",
+          "场景、业务类型、appList、ruleList、字段映射、外部 URL、枚举转换、飞书表格地址和 AI 提示词尽量配置化。",
+          "base_config_item 可维护 EAM 字段 ZYSSK 映射、飞书 sheet 地址、Handler 字段映射等，减少外部字段变化带来的代码改动。",
+        ],
+      },
     ],
   },
   {
@@ -123,7 +176,7 @@ const enterpriseProjects = [
     icon: Briefcase,
     stack: ["Spring Boot", "MyBatis-Plus", "MySQL", "Dubbo", "XXL-JOB", "TextIn"],
     summary:
-      "公司内部合同全生命周期管理系统，覆盖合同拟定、模板配置、审批流转、电子签署、文件归档、合同检索、权限控制、用印管理及外部系统联动。",
+      "公司内部企业级合同全生命周期管理系统，覆盖合同拟定、模板配置、审批流转、电子签署、文件归档、合同检索、权限控制、用印管理、智能体创建合同及外部系统联动。系统通过流程中心、文件中心、用户/组织/供应商中心、计划系统、消息中心和 OCR/TextIn 等服务完成合同闭环。",
     keyFacts: ["合同全生命周期", "智能体创建专家协议", "流程中心联动", "文件/OCR/签署补偿"],
     points: [
       "参与合同拟定、提交、审批、签署、归档等核心链路开发与维护。",
@@ -177,6 +230,42 @@ const enterpriseProjects = [
           "日常排查会结合合同编码查主子合同、流程实例、文件记录、签署方、签章位置和定时任务补偿状态。",
         ],
       },
+      {
+        title: "模板、文件与 OCR",
+        items: [
+          "模板管理支持模板列表、启停、字段映射、预设签署方配置、模板预览、业务场景和合同类型配置。",
+          "关键模板表包括 contract_template_config、contract_template_field_config、contract_template_scene、contract_template_signer_config。",
+          "文件/PDF 模块处理合同 PDF 生成、上传、下载、预览、离线文件校验、TextIn/OCR 识别和印章提取。",
+          "系统内部 fileId 是文件中心 ID，E签宝 fileKey 是电子签侧文件标识，两者在下载和签署联调时需要明确区分。",
+        ],
+      },
+      {
+        title: "外部系统集成",
+        items: [
+          "流程中心负责创建审批流和完成审批任务；E签宝负责发起签署流、签章、回调、账号同步和签署状态同步。",
+          "文件中心负责合同文件上传下载预览；用户中心、组织中心和供应商中心提供人员、部门、专家、供应商和银行账号信息。",
+          "计划系统负责活动计划和会议计划关联，消息中心负责审批/签署通知，配置中心提供授权代表、合同类型和金额区间配置。",
+          "合合文档解析、TextIn/OCR 和百度 OCR 用于离线文件识别、印章识别和风险检查。",
+        ],
+      },
+      {
+        title: "定时任务与补偿",
+        items: [
+          "XXL-JOB 任务包含合同状态同步、合同 PDF 生成补偿、集团自动盖章 PDF 处理、Docsign 文件归档到飞书和用户同步到 E签宝。",
+          "ContractStatusHandler 处理合同状态同步，ContractCreatePDFHandler 处理 PDF 生成补偿，OcrCheckHandler 处理 OCR 检查任务。",
+          "当文件生成、签署状态、消息通知或归档链路出现异步不一致时，可通过定时任务补偿和 SQL 排查恢复状态。",
+          "本地与 Linux 环境路径差异会影响 PDF 临时目录和字体路径，因此文件处理逻辑需要依赖配置和路径兼容。",
+        ],
+      },
+      {
+        title: "常见排查场景",
+        items: [
+          "合同没有 contract_file 时，检查 PDF 生成处理器、文件中心上传、主子合同写入位置、异步线程和事务提交情况。",
+          "当前签署人不能签时，检查 contract_signer 的签署顺序、signerCode、合同状态以及主子合同 ID 是否匹配。",
+          "流程中心提示操作人非审批人时，通过 contract_relation_other_app 找到 processInstId，再核对当前任务审批人与请求头用户。",
+          "文件下载失败时，优先确认 contract_file.file_id 是否为空、是否拿 E签宝 fileKey 当文件中心 fileId、以及环境是否一致。",
+        ],
+      },
     ],
   },
 ];
@@ -189,7 +278,7 @@ const personalProjects = [
     repo: "https://github.com/51522yhj/yyoj",
     stack: ["Spring Cloud Alibaba", "Nacos", "Gateway", "OpenFeign", "RabbitMQ", "Redis", "MySQL"],
     summary:
-      "类 LeetCode / 洛谷的在线编程评测系统，拆分网关、用户、题目、判题、代码沙箱和竞赛服务，通过 RabbitMQ 承接异步判题任务，并支持 AI 辅助生成题目。",
+      "前后端分离的在线判题与编程竞赛平台，支持用户注册登录、题库管理、在线写题、异步判题、代码沙箱、多语言执行、竞赛报名、排行榜/图表统计、评论点赞、文件上传和 AI 辅助出题。后端按网关、用户、题目、判题、代码沙箱和竞赛服务拆分，通过 RabbitMQ 承接耗时判题任务。",
     keyFacts: ["Spring Cloud 微服务", "RabbitMQ 异步判题", "代码沙箱", "AI 辅助出题"],
     points: [
       "题目服务保存提交记录并投递消息，判题服务消费后调用代码沙箱执行。",
@@ -198,6 +287,17 @@ const personalProjects = [
       "竞赛提交使用独立 exchange/queue，避免和普通题提交混在一起。",
     ],
     flow: ["提交代码", "保存 WAITING 记录", "投递 RabbitMQ", "判题服务消费", "沙箱执行", "策略比较", "写回 JudgeInfo"],
+    sequence: {
+      lanes: ["用户/前端", "题目服务", "RabbitMQ", "判题服务", "代码沙箱", "MySQL"],
+      messages: [
+        ["用户/前端", "题目服务", "提交代码"],
+        ["题目服务", "MySQL", "保存 WAITING"],
+        ["题目服务", "RabbitMQ", "发送提交 ID"],
+        ["RabbitMQ", "判题服务", "消费消息"],
+        ["判题服务", "代码沙箱", "执行代码"],
+        ["判题服务", "MySQL", "回写 JudgeInfo"],
+      ],
+    },
     detailSections: [
       {
         title: "系统定位",
@@ -222,7 +322,7 @@ const personalProjects = [
           "普通题提交使用 code_exchange、code_queue、my_routingKey；竞赛提交使用 code_exchange1、code_queue1、my_routingKey1。",
           "使用 MQ 的原因是提交接口可以快速返回 ID，判题任务排队消费，后续可横向扩展多个判题服务实例。",
           "竞赛提交和普通题提交拆队列，便于做优先级、隔离和统计，避免互相影响。",
-          "面试表达上可以强调先落库再投递消息，让任务具备可查询状态，失败时也更容易补偿或重试。",
+          "先落库再投递消息，让任务具备可查询状态，失败时也更容易补偿或重试。",
         ],
       },
       {
@@ -234,6 +334,42 @@ const personalProjects = [
           "当前沙箱适合学习和演示，生产级还应进一步加强 Docker/Firecracker、网络隔离、文件系统隔离、CPU/内存限制和超时强杀。",
         ],
       },
+      {
+        title: "用户、权限与网关",
+        items: [
+          "登录成功后生成 JWT token，并将 token:userId 写入 Redis，前端后续通过 Authorization 携带 token。",
+          "Redis 让登录态可控，可支持退出登录、过期和在线状态判断；管理员可结合 Redis 判断用户是否在线。",
+          "Gateway 统一路由到用户、题目、判题、沙箱和竞赛服务，并拦截 /**/inner/** 内部接口，避免外部直接访问内部判题接口。",
+          "用户服务承载注册、登录、个人资料、管理员用户管理、评论、点赞和文件上传。",
+        ],
+      },
+      {
+        title: "题库与 AI 出题",
+        items: [
+          "题目服务支持创建、编辑、更新、删除、分页查询、我的题目、待审核题目和题目审核流程。",
+          "Question 保存题目主体，JudgeCase 保存输入输出测试用例，JudgeConfig 保存时间、内存和栈限制。",
+          "题目创建时将判题用例和判题配置序列化为 JSON，判题服务执行时再反序列化成 Java 对象。",
+          "AI 辅助出题通过 AiManager 和提示词模板生成题目内容、答案、测试用例和判题配置。",
+        ],
+      },
+      {
+        title: "竞赛、互动与前端",
+        items: [
+          "竞赛模块支持发布竞赛、报名、查看报名人数、我创建/参与的竞赛、竞赛题目、竞赛提交、统计图表和排行榜。",
+          "评论和点赞支持父子评论、我的评论、删除评论、点赞/取消点赞，并通过 comment 和 comment_like 表保存。",
+          "前端包含题目列表、在线做题、提交记录、题目管理、题目审核、登录注册、竞赛列表、竞赛详情和排行榜页面。",
+          "CodeEditor 基于 Monaco Editor，Markdown 编辑/展示使用 ByteMD，图表统计使用 ECharts。",
+        ],
+      },
+      {
+        title: "数据库与扩展方向",
+        items: [
+          "核心表包括 user、question、question_submit、competition、competition_question、competition_register、question_competition_submit、comment 和 comment_like。",
+          "判题防重复依赖状态判断，可进一步使用 where id=? and status=WAITING 的条件更新或乐观锁增强幂等。",
+          "失败处理可扩展 MQ 手动 ACK、NACK 重试、死信队列、失败原因日志和用户侧 System Error 展示。",
+          "吞吐提升方向包括多判题实例、按语言拆队列、竞赛高优先级队列、沙箱池化、容器预热和测试用例缓存。",
+        ],
+      },
     ],
   },
   {
@@ -243,7 +379,7 @@ const personalProjects = [
     repo: "https://github.com/51522yhj/luhet_agent",
     stack: ["Spring Boot 3", "Spring AI Alibaba", "ReactAgent", "MemorySaver", "Tool Calling", "SSE"],
     summary:
-      "将 Dify 录合同流程改造为 Spring AI Alibaba 应用，用 ReactAgent、MemorySaver 和 Tool Calling 把自然语言对话收束到确定的合同业务流程。",
+      "将 Dify 录合同流程改造为 Spring AI Alibaba 应用，通过 ReactAgent、MemorySaver、Tool Calling 和 SSE 流式输出，把自然语言对话收束到可校验、可确认、可中断、可落库的合同创建业务流程。流程围绕 17 个业务接口组织合同创建、状态查询、规则校验、审批查看等 Tool。",
     keyFacts: ["17 个业务接口", "Tool Calling", "SSE 流式输出", "二次确认"],
     points: [
       "围绕 17 个接口组织合同创建、状态查询、规则校验、审批查看等 Tool。",
@@ -252,6 +388,17 @@ const personalProjects = [
       "Tool 调用结果回填到合同草稿，避免 AI 内容停留在非确定文本层。",
     ],
     flow: ["输入合同意图", "解析上下文", "选择 Tool", "调用合同接口", "风险校验", "用户确认", "创建合同并发起审批"],
+    sequence: {
+      lanes: ["用户", "前端", "Spring AI Agent", "业务 Tool", "合同系统", "SSE"],
+      messages: [
+        ["用户", "前端", "输入合同意图"],
+        ["前端", "Spring AI Agent", "发起流式会话"],
+        ["Spring AI Agent", "业务 Tool", "选择并调用 Tool"],
+        ["业务 Tool", "合同系统", "查询/校验/草稿"],
+        ["Spring AI Agent", "SSE", "输出待确认项"],
+        ["用户", "合同系统", "确认后创建合同"],
+      ],
+    },
     detailSections: [
       {
         title: "改造目标",
@@ -322,7 +469,7 @@ const vibeProjects = [
     repo: "https://github.com/51522yhj/zhishike",
     stack: ["Electron", "React", "TypeScript", "科大讯飞语音转写", "阿里大模型接口"],
     summary:
-      "Electron + React + TypeScript 桌面助手，聚焦会议、面试、答题场景。语音转写和大模型接口可配置，结合知识库、屏幕上下文和个人提示词生成实时建议。",
+      "Electron + React + TypeScript 桌面助手，聚焦会议、答题和知识辅助场景。语音转写和大模型接口可配置，结合知识库、屏幕上下文和个人提示词生成实时建议。",
     images: [
       "/assets/showcase/screenshot-05.png",
       "/assets/showcase/screenshot-06.png",
@@ -612,7 +759,6 @@ function Hero() {
         <Reveal>
           <p className="hero-kicker">Java Backend · AI Application · Microservices</p>
           <h1>于昊骏</h1>
-          <h2>Java 后端开发工程师</h2>
           <p className="hero-copy">
             熟悉 Spring Boot、Spring Cloud Alibaba、RabbitMQ、Kafka、Redis、Dubbo、XXL-JOB。参与企业级智能审核、合同全生命周期系统，也做过从开发到上线的 VibeCoding 项目。
           </p>
@@ -624,11 +770,9 @@ function Hero() {
             <MagneticButton href={links.github} className="button-soft">
               <GithubLogo weight="bold" /> GitHub
             </MagneticButton>
-          </div>
-          <div className="hero-links">
-            <a href={links.note} target="_blank" rel="noreferrer">
-              语雀学习笔记和工作笔记：{links.note}
-            </a>
+            <MagneticButton href={links.note} className="button-soft">
+              <LinkSimple weight="bold" /> 语雀笔记
+            </MagneticButton>
           </div>
         </Reveal>
         <Reveal className="portrait-stage" delay={0.15}>
@@ -668,6 +812,11 @@ function WorkExperience() {
               <h3>{item.company}</h3>
               <strong>{item.role}</strong>
               <p>{item.text}</p>
+              <ul className="work-detail-list">
+                {(item.details || []).map((detail) => (
+                  <li key={detail}>{detail}</li>
+                ))}
+              </ul>
               <div className="tag-row">
                 {item.tags.map((tag) => (
                   <span key={tag}>{tag}</span>
@@ -732,6 +881,49 @@ function FlowLine({ steps }) {
   );
 }
 
+function SequenceDiagram({ project }) {
+  const lanes = project.sequence?.lanes || [];
+  const messages = project.sequence?.messages || [];
+
+  if (!lanes.length || !messages.length) {
+    return <FlowLine steps={project.flow} />;
+  }
+
+  return (
+    <div className="sequence-diagram" aria-label={`${project.title} 时序图`}>
+      <div className="sequence-lanes" style={{ "--lane-count": lanes.length }}>
+        {lanes.map((lane) => (
+          <div className="sequence-lane" key={lane}>
+            <span>{lane}</span>
+          </div>
+        ))}
+      </div>
+      <div className="sequence-messages">
+        {messages.map(([from, to, label], index) => {
+          const fromIndex = Math.max(0, lanes.indexOf(from));
+          const toIndex = Math.max(0, lanes.indexOf(to));
+          const start = Math.min(fromIndex, toIndex);
+          const end = Math.max(fromIndex, toIndex);
+          const reverse = fromIndex > toIndex;
+          return (
+            <div
+              className={`sequence-message ${reverse ? "reverse" : ""}`}
+              key={`${label}-${index}`}
+              style={{
+                "--row": index + 1,
+                "--start": start + 1,
+                "--span": end - start + 1,
+              }}
+            >
+              <span>{label}</span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 function PersonalProjects({ onDetail }) {
   return (
     <section id="projects" className="content-section projects-section">
@@ -762,7 +954,7 @@ function PersonalProjects({ onDetail }) {
                 </button>
               </div>
             </div>
-            <FlowLine steps={project.flow} />
+            <SequenceDiagram project={project} />
           </Reveal>
         ))}
       </div>
@@ -774,16 +966,9 @@ function VibeCodingWorks({ onDetail }) {
   const [active, setActive] = useState(0);
   const project = vibeProjects[active];
 
-  useEffect(() => {
-    const timer = window.setInterval(() => {
-      setActive((value) => (value + 1) % vibeProjects.length);
-    }, 5200);
-    return () => window.clearInterval(timer);
-  }, []);
-
   return (
     <section id="vibecoding" className="content-section vibe-section">
-      <SectionTitle label="VibeCoding Works" title="VibeCoding 作品" text="每个作品单独导航，图片上下结构自动播放，展示真实 README 截图与仓库链接。" />
+      <SectionTitle label="VibeCoding Works" title="VibeCoding 作品" text="每个作品单独导航，用户手动切换项目和图片，展示真实 README 截图与仓库链接。" />
       <Reveal className="vibe-shell">
         <div className="vibe-nav" role="tablist" aria-label="VibeCoding 项目">
           {vibeProjects.map((item, index) => (
@@ -835,14 +1020,8 @@ function VibeCodingWorks({ onDetail }) {
 function ImageCarousel({ project }) {
   const [index, setIndex] = useState(0);
   const images = project.images || [];
-
-  useEffect(() => {
-    if (images.length < 2) return undefined;
-    const timer = window.setInterval(() => {
-      setIndex((value) => (value + 1) % images.length);
-    }, 2600);
-    return () => window.clearInterval(timer);
-  }, [images.length, project.id]);
+  const goPrev = () => setIndex((value) => (value - 1 + images.length) % images.length);
+  const goNext = () => setIndex((value) => (value + 1) % images.length);
 
   return (
     <div className="image-carousel">
@@ -858,6 +1037,18 @@ function ImageCarousel({ project }) {
           transition={{ duration: 0.45 }}
         />
       </AnimatePresence>
+      {images.length > 1 && (
+        <div className="carousel-arrows">
+          <button type="button" onClick={goPrev} aria-label="上一张图片">
+            <CaretLeft weight="bold" />
+            上一张
+          </button>
+          <button type="button" onClick={goNext} aria-label="下一张图片">
+            下一张
+            <CaretRight weight="bold" />
+          </button>
+        </div>
+      )}
       <div className="carousel-dots">
         {images.map((image, dotIndex) => (
           <button
@@ -994,7 +1185,6 @@ function Footer() {
   return (
     <footer className="site-footer">
       <strong>Yuhaojun · Java Backend</strong>
-      <span>Built for Cloudflare Pages · React + Vite + Motion</span>
     </footer>
   );
 }
