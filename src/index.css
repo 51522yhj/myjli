@@ -2,15 +2,15 @@
 @import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap");
 
 :root {
-  color-scheme: light;
-  --bg: oklch(0.965 0.028 236);
+  color-scheme: dark;
+  --bg: oklch(0.12 0.025 265);
   --surface: oklch(0.985 0.01 248 / 0.58);
   --surface-strong: oklch(0.96 0.032 245 / 0.68);
-  --ink: oklch(0.18 0.055 255);
-  --muted: oklch(0.43 0.045 250);
-  --primary: oklch(0.58 0.19 252);
-  --primary-deep: oklch(0.34 0.15 252);
-  --accent: oklch(0.82 0.12 215);
+  --ink: oklch(0.92 0.024 238);
+  --muted: oklch(0.78 0.035 238 / 0.76);
+  --primary: oklch(0.76 0.14 268);
+  --primary-deep: oklch(0.84 0.11 236);
+  --accent: oklch(0.82 0.16 292);
   --line: oklch(1 0 0 / 0.48);
   --glow: oklch(0.78 0.14 228 / 0.44);
   --glass: oklch(1 0 0 / 0.36);
@@ -45,11 +45,7 @@ html {
 body {
   margin: 0;
   min-width: 320px;
-  background:
-    radial-gradient(circle at 12% 8%, oklch(0.82 0.13 222 / 0.34), transparent 28rem),
-    radial-gradient(circle at 88% 6%, oklch(0.72 0.17 254 / 0.22), transparent 30rem),
-    radial-gradient(circle at 65% 82%, oklch(0.86 0.12 201 / 0.26), transparent 34rem),
-    linear-gradient(135deg, oklch(0.98 0.018 230), oklch(0.92 0.045 244) 52%, oklch(0.98 0.012 222));
+  background: #050509;
   color: var(--ink);
   overflow-x: hidden;
 }
@@ -65,9 +61,9 @@ body::after {
 body::before {
   inset: -20%;
   background:
-    radial-gradient(circle at 18% 24%, oklch(0.84 0.13 225 / 0.34), transparent 19rem),
-    radial-gradient(circle at 72% 18%, oklch(0.68 0.18 260 / 0.2), transparent 22rem),
-    radial-gradient(circle at 52% 78%, oklch(0.91 0.09 198 / 0.28), transparent 26rem);
+    radial-gradient(circle at 18% 24%, oklch(0.52 0.16 282 / 0.16), transparent 19rem),
+    radial-gradient(circle at 72% 18%, oklch(0.6 0.16 238 / 0.15), transparent 22rem),
+    radial-gradient(circle at 52% 78%, oklch(0.45 0.14 292 / 0.16), transparent 26rem);
   filter: blur(10px);
   animation: backgroundAurora 18s ease-in-out infinite alternate;
 }
@@ -80,7 +76,7 @@ body::after {
     radial-gradient(circle, oklch(1 0 0 / 0.8) 0 1px, transparent 1.6px);
   background-size: 76px 76px, 76px 76px, 118px 118px;
   mask-image: linear-gradient(180deg, black, transparent 88%);
-  opacity: 0.62;
+  opacity: 0.18;
 }
 
 body::selection {
@@ -136,8 +132,38 @@ button {
 .particle-field {
   position: fixed;
   inset: 0;
-  z-index: -3;
+  z-index: -1;
   pointer-events: none;
+}
+
+.cinematic-background {
+  position: fixed;
+  inset: 0;
+  z-index: -4;
+  overflow: hidden;
+  background: #050509;
+  pointer-events: none;
+}
+
+.cinematic-background video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  opacity: 0;
+  filter: brightness(0.62) saturate(1.12) contrast(1.08);
+  transform: translateY(17%) scale(1.14);
+  will-change: opacity;
+}
+
+.cinematic-background::after {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.3), transparent 24%, rgba(0, 0, 0, 0.74) 82%),
+    radial-gradient(ellipse at 50% 76%, rgba(86, 112, 255, 0.22), rgba(0, 0, 0, 0.62) 72%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.48), transparent 26%, transparent 74%, rgba(0, 0, 0, 0.48));
+  content: "";
 }
 
 .site-header {
@@ -220,10 +246,10 @@ button {
   place-items: center;
   overflow: hidden;
   background:
-    radial-gradient(circle at 50% 38%, oklch(1 0 0 / 0.64), transparent 14rem),
-    radial-gradient(circle at 27% 22%, oklch(0.83 0.14 224 / 0.42), transparent 24rem),
-    radial-gradient(circle at 74% 24%, oklch(0.68 0.18 255 / 0.34), transparent 26rem),
-    linear-gradient(135deg, oklch(0.96 0.03 226), oklch(0.82 0.09 245) 54%, oklch(0.96 0.02 218));
+    radial-gradient(circle at 50% 40%, oklch(0.6 0.18 275 / 0.36), transparent 18rem),
+    radial-gradient(circle at 25% 18%, oklch(0.43 0.16 245 / 0.34), transparent 26rem),
+    radial-gradient(circle at 76% 20%, oklch(0.55 0.18 300 / 0.26), transparent 28rem),
+    linear-gradient(135deg, #050509, #101224 54%, #050509);
   perspective: 2200px;
 }
 
@@ -232,9 +258,9 @@ button {
   inset: 0;
   z-index: 0;
   background-image:
-    linear-gradient(oklch(1 0 0 / 0.22) 1px, transparent 1px),
-    linear-gradient(90deg, oklch(1 0 0 / 0.18) 1px, transparent 1px),
-    radial-gradient(circle, oklch(1 0 0 / 0.86) 0 1.4px, transparent 2px);
+    linear-gradient(oklch(0.72 0.16 275 / 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(0.72 0.16 245 / 0.1) 1px, transparent 1px),
+    radial-gradient(circle, oklch(0.92 0.08 245 / 0.46) 0 1.4px, transparent 2px);
   background-size: 84px 84px, 84px 84px, 126px 126px;
   content: "";
   opacity: 0.72;
@@ -247,7 +273,7 @@ button {
   width: 18vmin;
   height: 64vmin;
   border-radius: 999px;
-  background: radial-gradient(ellipse, white 0 16%, oklch(0.86 0.16 225 / 0.86) 42%, transparent 72%);
+  background: radial-gradient(ellipse, white 0 14%, oklch(0.78 0.18 278 / 0.88) 42%, transparent 72%);
   opacity: 0;
   pointer-events: none;
   transform: scale(0.2);
@@ -258,7 +284,7 @@ button {
   filter: blur(10px);
 }
 
-.gate-world-image {
+.gate-video-bg {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -266,7 +292,8 @@ button {
   object-fit: cover;
   object-position: center center;
   opacity: 0;
-  transform: scale(1.035);
+  filter: brightness(0.48) saturate(1.18) contrast(1.08);
+  transform: translateY(17%) scale(1.18);
   transition:
     transform 1s cubic-bezier(0.2, 0.9, 0.2, 1),
     filter 0.75s ease,
@@ -278,8 +305,8 @@ button {
   inset: 0;
   z-index: 2;
   background:
-    radial-gradient(ellipse at 50% 46%, transparent 0 34%, oklch(0.18 0.08 255 / 0.16) 72%),
-    linear-gradient(180deg, oklch(1 0 0 / 0.3), transparent 24%, transparent 68%, oklch(0.56 0.12 248 / 0.2));
+    radial-gradient(ellipse at 50% 46%, transparent 0 28%, oklch(0.05 0.02 255 / 0.46) 72%),
+    linear-gradient(180deg, oklch(0.03 0.02 255 / 0.34), transparent 24%, transparent 68%, oklch(0.03 0.02 255 / 0.7));
   pointer-events: none;
 }
 
@@ -291,14 +318,82 @@ button {
   pointer-events: none;
 }
 
+.cosmic-gate-frame {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  z-index: 8;
+  width: min(58vw, 720px);
+  height: min(72vh, 760px);
+  border-radius: 999px 999px 34px 34px;
+  border: 1.5px solid oklch(0.86 0.12 255 / 0.34);
+  transform: translate(-50%, -50%) translateZ(80px);
+  box-shadow:
+    inset 0 0 38px oklch(0.76 0.16 280 / 0.24),
+    inset 0 0 120px oklch(0.42 0.18 285 / 0.2),
+    0 0 80px oklch(0.6 0.18 278 / 0.38),
+    0 24px 120px oklch(0.18 0.08 260 / 0.6);
+  backdrop-filter: blur(6px) saturate(130%);
+}
+
+.cosmic-gate-frame::before,
+.cosmic-gate-frame::after {
+  position: absolute;
+  content: "";
+  pointer-events: none;
+}
+
+.cosmic-gate-frame::before {
+  inset: 6%;
+  border: 1px solid oklch(0.92 0.08 235 / 0.22);
+  border-radius: inherit;
+  box-shadow: 0 0 44px oklch(0.58 0.18 285 / 0.34);
+}
+
+.cosmic-gate-frame::after {
+  left: 50%;
+  top: 4%;
+  width: 1px;
+  height: 91%;
+  background: linear-gradient(180deg, transparent, oklch(0.9 0.08 255 / 0.66), transparent);
+  box-shadow: 0 0 26px oklch(0.78 0.17 275 / 0.66);
+}
+
+.cosmic-gate-frame span {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 86%;
+  height: 86%;
+  border: 1px solid oklch(0.62 0.16 285 / 0.18);
+  border-radius: inherit;
+  transform: translate(-50%, -50%) rotateZ(var(--gate-rotate, 0deg));
+}
+
+.cosmic-gate-frame span:nth-child(1) {
+  --gate-rotate: 12deg;
+}
+
+.cosmic-gate-frame span:nth-child(2) {
+  --gate-rotate: -14deg;
+  width: 72%;
+  height: 72%;
+}
+
+.cosmic-gate-frame span:nth-child(3) {
+  --gate-rotate: 38deg;
+  width: 58%;
+  height: 58%;
+}
+
 .real-door {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(105deg, oklch(1 0 0 / 0.5), oklch(0.82 0.08 234 / 0.22) 45%, oklch(1 0 0 / 0.34)),
-    radial-gradient(circle at 50% 12%, oklch(1 0 0 / 0.5), transparent 16rem);
-  filter: drop-shadow(0 0 28px oklch(0.68 0.17 230 / 0.32));
-  opacity: 0.62;
+    linear-gradient(105deg, oklch(0.86 0.1 252 / 0.15), oklch(0.36 0.15 280 / 0.26) 45%, oklch(0.92 0.08 240 / 0.1)),
+    radial-gradient(circle at 50% 12%, oklch(0.84 0.14 275 / 0.16), transparent 16rem);
+  filter: drop-shadow(0 0 34px oklch(0.58 0.18 280 / 0.36));
+  opacity: 0.7;
   transform: translateZ(26px);
   transform-style: preserve-3d;
   backface-visibility: hidden;
@@ -319,17 +414,17 @@ button {
 
 .real-door::before {
   background:
-    linear-gradient(90deg, oklch(1 0 0 / 0.2), transparent 16%, transparent 84%, oklch(1 0 0 / 0.2)),
-    linear-gradient(180deg, oklch(1 0 0 / 0.32), transparent 34%, oklch(0.64 0.14 235 / 0.2));
-  border: 1px solid oklch(1 0 0 / 0.38);
+    linear-gradient(90deg, oklch(0.92 0.08 250 / 0.08), transparent 16%, transparent 84%, oklch(0.92 0.08 250 / 0.08)),
+    linear-gradient(180deg, oklch(0.7 0.12 280 / 0.18), transparent 34%, oklch(0.3 0.13 275 / 0.22));
+  border: 1px solid oklch(0.85 0.1 255 / 0.24);
   backdrop-filter: blur(26px) saturate(155%);
   mix-blend-mode: screen;
 }
 
 .real-door::after {
   background:
-    linear-gradient(90deg, transparent 41%, oklch(1 0 0 / 0.58) 50%, transparent 59%),
-    radial-gradient(circle at 50% 13%, oklch(0.88 0.16 225 / 0.42), transparent 16%);
+    linear-gradient(90deg, transparent 41%, oklch(0.92 0.08 255 / 0.46) 50%, transparent 59%),
+    radial-gradient(circle at 50% 13%, oklch(0.72 0.18 285 / 0.36), transparent 16%);
   mix-blend-mode: screen;
 }
 
@@ -351,10 +446,10 @@ button {
   width: clamp(4px, 0.7vw, 12px);
   height: 76%;
   border-radius: 999px;
-  background: linear-gradient(180deg, transparent, oklch(0.92 0.08 230), white, oklch(0.74 0.2 230), transparent);
+  background: linear-gradient(180deg, transparent, oklch(0.88 0.12 255), white, oklch(0.72 0.2 286), transparent);
   box-shadow:
-    0 0 18px oklch(0.86 0.15 225 / 0.82),
-    0 0 52px oklch(0.68 0.22 245 / 0.56);
+    0 0 18px oklch(0.8 0.15 260 / 0.82),
+    0 0 62px oklch(0.64 0.22 286 / 0.62);
   opacity: 0.72;
   transform: translateX(-50%) translateZ(70px);
   animation: gatePulse 2.7s ease-in-out infinite;
@@ -368,7 +463,7 @@ button {
   width: clamp(42px, 5vw, 96px);
   height: clamp(42px, 5vw, 96px);
   border-radius: 999px;
-  background: radial-gradient(circle, white 0 12%, oklch(0.86 0.15 230 / 0.9) 28%, transparent 70%);
+  background: radial-gradient(circle, white 0 12%, oklch(0.76 0.19 286 / 0.86) 28%, transparent 70%);
   opacity: 0.76;
   transform: translateX(-50%) translateZ(120px);
   filter: blur(1px);
@@ -433,10 +528,17 @@ button {
   transform: scale(11);
 }
 
-.gate-intro.opening .gate-world-image {
+.gate-intro.opening .gate-video-bg {
   opacity: 0;
-  filter: blur(5px) brightness(1.22) saturate(1.14);
-  transform: scale(1.18) translateY(1.2vh);
+  filter: blur(8px) brightness(1.1) saturate(1.16);
+  transform: translateY(17%) scale(1.26);
+}
+
+.gate-intro.opening .cosmic-gate-frame {
+  opacity: 0;
+  filter: blur(12px);
+  transform: translate(-50%, -50%) translateZ(120px) scale(1.14);
+  transition: transform 0.8s cubic-bezier(0.2, 0.9, 0.2, 1), opacity 0.46s ease, filter 0.55s ease;
 }
 
 .gate-intro.opening .real-door-left {
@@ -619,6 +721,7 @@ button {
 .explorer-layout {
   position: relative;
   z-index: 1;
+  overflow-x: clip;
 }
 
 .hero-section {
@@ -630,7 +733,7 @@ button {
   justify-content: center;
   overflow: hidden;
   isolation: isolate;
-  background: #000;
+  background: transparent;
   padding: 7rem 1.5rem 3rem;
 }
 
@@ -703,7 +806,7 @@ button {
   margin-top: 0.5rem;
   color: oklch(0.98 0.012 236);
   font-family: "Instrument Serif", serif;
-  font-size: clamp(4rem, 12vw, 7rem);
+  font-size: clamp(4.2rem, 15vw, 9.8rem);
   font-weight: 400;
   line-height: 0.92;
   letter-spacing: -0.035em;
@@ -728,7 +831,7 @@ button {
 .hero-copy {
   max-width: 60ch;
   margin: 0 auto;
-  color: rgba(255, 255, 255, 0.88);
+  color: rgba(255, 255, 255, 0.82);
   font-size: clamp(0.98rem, 1.35vw, 1.1rem);
   line-height: 1.75;
   text-shadow: 0 10px 34px oklch(0.04 0.03 255 / 0.62);
@@ -912,9 +1015,25 @@ button {
 }
 
 .content-section {
+  position: relative;
   width: min(1380px, calc(100% - clamp(2rem, 7vw, 7rem)));
   margin: 0 auto;
   padding: clamp(5rem, 10vw, 9rem) 0;
+  isolation: isolate;
+}
+
+.content-section::before {
+  position: absolute;
+  inset: clamp(2rem, 4vw, 4rem) calc(clamp(1rem, 4vw, 4rem) * -0.35);
+  z-index: -1;
+  border-radius: clamp(28px, 5vw, 60px);
+  background:
+    linear-gradient(180deg, rgba(12, 12, 12, 0.72), rgba(12, 12, 12, 0.42)),
+    radial-gradient(circle at 20% 0%, rgba(103, 93, 255, 0.16), transparent 34rem),
+    radial-gradient(circle at 80% 100%, rgba(34, 157, 255, 0.12), transparent 34rem);
+  content: "";
+  backdrop-filter: blur(18px) saturate(118%);
+  -webkit-backdrop-filter: blur(18px) saturate(118%);
 }
 
 .vibe-section,
@@ -929,8 +1048,13 @@ button {
 
 .section-title h2 {
   margin-top: 0.55rem;
+  background: linear-gradient(180deg, #646973 0%, #bbccd7 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
   font-size: clamp(2.6rem, 8vw, 6.3rem);
   line-height: 0.95;
+  text-transform: uppercase;
 }
 
 .vibe-section .section-title,
@@ -946,7 +1070,7 @@ button {
 .section-title p {
   max-width: 62ch;
   margin: 1rem 0 0;
-  color: var(--muted);
+  color: rgba(215, 226, 234, 0.74);
   font-size: 1.08rem;
   line-height: 1.8;
 }
@@ -988,15 +1112,16 @@ button {
 .skill-proof {
   position: relative;
   overflow: hidden;
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius);
+  border: 1px solid rgba(215, 226, 234, 0.22);
+  border-radius: clamp(24px, 4vw, 48px);
   background:
-    linear-gradient(135deg, oklch(1 0 0 / 0.52), oklch(1 0 0 / 0.18)),
-    radial-gradient(circle at 18% 0%, oklch(0.86 0.12 228 / 0.24), transparent 22rem),
-    radial-gradient(circle at 100% 100%, oklch(0.7 0.16 255 / 0.12), transparent 20rem);
+    linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.018)),
+    radial-gradient(circle at 18% 0%, rgba(118, 33, 176, 0.2), transparent 22rem),
+    radial-gradient(circle at 100% 100%, rgba(62, 140, 255, 0.13), transparent 20rem);
   background-size: cover;
-  box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.62), 0 22px 80px oklch(0.27 0.12 252 / 0.1);
-  backdrop-filter: blur(30px) saturate(165%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 22px 80px rgba(0, 0, 0, 0.24);
+  backdrop-filter: blur(24px) saturate(132%);
+  -webkit-backdrop-filter: blur(24px) saturate(132%);
 }
 
 .work-node > div::before,
@@ -1008,8 +1133,8 @@ button {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(120deg, oklch(1 0 0 / 0.46), transparent 32%, transparent 70%, oklch(1 0 0 / 0.16)),
-    radial-gradient(circle at 12% 8%, oklch(1 0 0 / 0.32), transparent 12rem);
+    linear-gradient(120deg, rgba(255, 255, 255, 0.12), transparent 32%, transparent 70%, rgba(255, 255, 255, 0.06)),
+    radial-gradient(circle at 12% 8%, rgba(255, 255, 255, 0.08), transparent 12rem);
   content: "";
   pointer-events: none;
 }
@@ -1034,7 +1159,7 @@ button {
 .vibe-copy h3,
 .detail-modal h3 {
   margin: 0;
-  color: var(--ink);
+  color: #d7e2ea;
   font-size: clamp(1.65rem, 3.8vw, 3.6rem);
   line-height: 1;
   letter-spacing: -0.035em;
@@ -1044,7 +1169,7 @@ button {
 .work-node strong {
   display: block;
   margin-top: 0.4rem;
-  color: var(--primary-deep);
+  color: #bbccd7;
 }
 
 .work-detail-list {
@@ -1052,7 +1177,7 @@ button {
   gap: 0.55rem;
   margin: 1rem 0 0;
   padding-left: 1.2rem;
-  color: var(--muted);
+  color: rgba(215, 226, 234, 0.72);
   line-height: 1.76;
 }
 
@@ -1065,7 +1190,7 @@ button {
 .project-panel p,
 .vibe-copy p,
 .detail-modal p {
-  color: var(--muted);
+  color: rgba(215, 226, 234, 0.72);
   line-height: 1.78;
 }
 
@@ -1081,10 +1206,10 @@ button {
   min-height: 32px;
   align-items: center;
   border-radius: 999px;
-  border: 1px solid oklch(1 0 0 / 0.48);
-  background: oklch(1 0 0 / 0.34);
+  border: 1px solid rgba(215, 226, 234, 0.2);
+  background: rgba(255, 255, 255, 0.055);
   padding: 0.35rem 0.72rem;
-  color: var(--primary-deep);
+  color: #d7e2ea;
   font-size: 0.86rem;
   font-weight: 850;
 }
@@ -1102,11 +1227,11 @@ button {
   display: inline-flex;
   align-items: center;
   min-height: 34px;
-  border: 1px solid oklch(1 0 0 / 0.52);
+  border: 1px solid rgba(215, 226, 234, 0.22);
   border-radius: 999px;
-  background: linear-gradient(135deg, oklch(1 0 0 / 0.52), oklch(0.88 0.06 240 / 0.22));
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.095), rgba(118, 33, 176, 0.12));
   padding: 0.38rem 0.76rem;
-  color: oklch(0.28 0.08 252);
+  color: #d7e2ea;
   font-size: 0.84rem;
   font-weight: 900;
 }

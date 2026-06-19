@@ -29,6 +29,9 @@ const links = {
   resume: "/assets/resume/yuhaojun-resume.pdf",
 };
 
+const cinematicVideoUrl =
+  "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_171521_25968ba2-b594-4b32-aab7-f6b69398a6fa.mp4";
+
 const navItems = [
   ["经历", "#work"],
   ["企业项目", "#enterprise"],
@@ -596,6 +599,90 @@ function useGateEntered() {
   return [entered, enter];
 }
 
+function useVideoLoopFade(videoRef) {
+  const fadeFrameRef = useRef(null);
+  const fadingOutRef = useRef(false);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return undefined;
+
+    const cancelFade = () => {
+      if (fadeFrameRef.current) {
+        cancelAnimationFrame(fadeFrameRef.current);
+        fadeFrameRef.current = null;
+      }
+    };
+
+    const fadeTo = (targetOpacity, duration = 500) => {
+      cancelFade();
+      const startOpacity = Number.parseFloat(video.style.opacity || "0");
+      const startedAt = performance.now();
+
+      const tick = (now) => {
+        const progress = Math.min((now - startedAt) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        video.style.opacity = String(startOpacity + (targetOpacity - startOpacity) * eased);
+
+        if (progress < 1) {
+          fadeFrameRef.current = requestAnimationFrame(tick);
+        } else {
+          fadeFrameRef.current = null;
+        }
+      };
+
+      fadeFrameRef.current = requestAnimationFrame(tick);
+    };
+
+    const playFromStart = () => {
+      video.currentTime = 0;
+      fadingOutRef.current = false;
+      void video.play();
+      fadeTo(1);
+    };
+
+    const handleCanPlay = () => {
+      fadeTo(1);
+    };
+
+    const handleTimeUpdate = () => {
+      if (!video.duration || Number.isNaN(video.duration)) return;
+      if (video.duration - video.currentTime <= 0.55 && !fadingOutRef.current) {
+        fadingOutRef.current = true;
+        fadeTo(0);
+      }
+    };
+
+    const handleEnded = () => {
+      video.style.opacity = "0";
+      window.setTimeout(playFromStart, 100);
+    };
+
+    video.style.opacity = "0";
+    video.addEventListener("canplay", handleCanPlay);
+    video.addEventListener("timeupdate", handleTimeUpdate);
+    video.addEventListener("ended", handleEnded);
+
+    return () => {
+      cancelFade();
+      video.removeEventListener("canplay", handleCanPlay);
+      video.removeEventListener("timeupdate", handleTimeUpdate);
+      video.removeEventListener("ended", handleEnded);
+    };
+  }, [videoRef]);
+}
+
+function CinematicBackground() {
+  const videoRef = useRef(null);
+  useVideoLoopFade(videoRef);
+
+  return (
+    <div className="cinematic-background" aria-hidden="true">
+      <video ref={videoRef} src={cinematicVideoUrl} autoPlay muted playsInline preload="metadata" />
+    </div>
+  );
+}
+
 function ParticleField() {
   const ref = useRef(null);
 
@@ -672,7 +759,9 @@ function ParticleField() {
 
 function GateIntro({ entered, onEnter }) {
   const [opening, setOpening] = useState(false);
+  const gateVideoRef = useRef(null);
   const reduced = useReducedMotion();
+  useVideoLoopFade(gateVideoRef);
 
   const start = () => {
     if (opening) return;
@@ -684,9 +773,14 @@ function GateIntro({ entered, onEnter }) {
     <AnimatePresence>
       {!entered && (
         <motion.section className={`gate-intro ${opening ? "opening" : ""}`} exit={{ opacity: 0 }} transition={{ duration: 0.42 }}>
-          <img className="gate-world-image" src="/assets/generated/celestial-gate.png" alt="" aria-hidden="true" />
+          <video className="gate-video-bg" ref={gateVideoRef} src={cinematicVideoUrl} autoPlay muted playsInline preload="metadata" aria-hidden="true" />
           <div className="gate-cinematic-shade" aria-hidden="true" />
           <div className="real-gate-stage" aria-hidden="true">
+            <div className="cosmic-gate-frame">
+              <span />
+              <span />
+              <span />
+            </div>
             <div className="real-door real-door-left" />
             <div className="real-door real-door-right" />
             <div className="gate-rift" />
@@ -782,99 +876,15 @@ function Reveal({ children, className = "", delay = 0 }) {
 
 function Hero() {
   const ref = useRef(null);
-  const videoRef = useRef(null);
-  const fadeFrameRef = useRef(null);
-  const fadingOutRef = useRef(false);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const y = useTransform(scrollYProgress, [0, 1], [0, 130]);
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.92]);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return undefined;
-
-    const cancelFade = () => {
-      if (fadeFrameRef.current) {
-        cancelAnimationFrame(fadeFrameRef.current);
-        fadeFrameRef.current = null;
-      }
-    };
-
-    const fadeTo = (targetOpacity, duration = 500) => {
-      cancelFade();
-      const startOpacity = Number.parseFloat(video.style.opacity || "0");
-      const startedAt = performance.now();
-
-      const tick = (now) => {
-        const progress = Math.min((now - startedAt) / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        video.style.opacity = String(startOpacity + (targetOpacity - startOpacity) * eased);
-
-        if (progress < 1) {
-          fadeFrameRef.current = requestAnimationFrame(tick);
-        } else {
-          fadeFrameRef.current = null;
-        }
-      };
-
-      fadeFrameRef.current = requestAnimationFrame(tick);
-    };
-
-    const playFromStart = () => {
-      video.currentTime = 0;
-      fadingOutRef.current = false;
-      void video.play();
-      fadeTo(1);
-    };
-
-    const handleCanPlay = () => {
-      fadeTo(1);
-    };
-
-    const handleTimeUpdate = () => {
-      if (!video.duration || Number.isNaN(video.duration)) return;
-      if (video.duration - video.currentTime <= 0.55 && !fadingOutRef.current) {
-        fadingOutRef.current = true;
-        fadeTo(0);
-      }
-    };
-
-    const handleEnded = () => {
-      video.style.opacity = "0";
-      window.setTimeout(playFromStart, 100);
-    };
-
-    video.style.opacity = "0";
-    video.addEventListener("canplay", handleCanPlay);
-    video.addEventListener("timeupdate", handleTimeUpdate);
-    video.addEventListener("ended", handleEnded);
-
-    return () => {
-      cancelFade();
-      video.removeEventListener("canplay", handleCanPlay);
-      video.removeEventListener("timeupdate", handleTimeUpdate);
-      video.removeEventListener("ended", handleEnded);
-    };
-  }, []);
+  const heroY = useTransform(scrollYProgress, [0, 1], [0, -90]);
 
   return (
     <section id="top" className="hero-section" ref={ref}>
-      <motion.div className="hero-visual-plane" style={{ y, scale }}>
-        <video
-          ref={videoRef}
-          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260328_115001_bcdaa3b4-03de-47e7-ad63-ae3e392c32d4.mp4"
-          autoPlay
-          muted
-          playsInline
-          preload="metadata"
-          aria-hidden="true"
-        />
-      </motion.div>
-      <div className="hero-content">
+      <motion.div className="hero-content" style={{ y: heroY }}>
         <Reveal className="hero-copy-panel">
           <p className="hero-kicker">Java Backend · AI Application · Microservices</p>
-          <h1 style={{ fontFamily: "'Instrument Serif', serif" }}>于昊骏</h1>
-          <h2>Java 后端开发工程师</h2>
+          <h1 style={{ fontFamily: "'Instrument Serif', serif" }}>YUHAOJUN</h1>
           <p className="hero-copy">
             熟悉 Spring Boot、Spring Cloud Alibaba、RabbitMQ、Kafka、Redis、Dubbo、XXL-JOB。参与企业级智能审核、合同全生命周期系统，也做过从开发到上线的 VibeCoding 项目。
           </p>
@@ -900,7 +910,7 @@ function Hero() {
             </MagneticButton>
           </div>
         </Reveal>
-      </div>
+      </motion.div>
       <div className="hero-socials" aria-label="常用链接">
         <a className="liquid-glass" href={links.github} target="_blank" rel="noreferrer" aria-label="GitHub">
           <GithubLogo weight="bold" aria-hidden="true" />
@@ -1373,6 +1383,7 @@ export default function App() {
 
   return (
     <>
+      <CinematicBackground />
       <ParticleField />
       <GateIntro entered={entered} onEnter={enter} />
       <Header />
